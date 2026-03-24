@@ -40,8 +40,9 @@ export function createApp() {
     }
   });
 
-  // File watcher -- broadcast to all connected WebSocket clients
-  const specsDir = resolve(process.cwd(), 'specs');
+  // File watcher -- resolve specs/ relative to monorepo root (2 levels up from this file)
+  const monorepoRoot = resolve(import.meta.dirname, '..', '..', '..');
+  const specsDir = resolve(monorepoRoot, 'specs');
   createFileWatcher(specsDir, (message) => hub.broadcast(message));
 
   return { app, server, hub, db };
