@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Ready to plan
-stopped_at: Completed 01-04-PLAN.md
-last_updated: "2026-03-24T18:42:38.846Z"
+stopped_at: Completed 260324-qi4 (close phase 01 gaps)
+last_updated: "2026-03-24T19:13:15Z"
 progress:
   total_phases: 4
   completed_phases: 1
@@ -49,6 +49,7 @@ Plan: Not started
 | Phase 01 P01 | 3 min | 2 tasks | 16 files |
 | Phase 01 P02 | 3 min | 2 tasks | 8 files |
 | Phase 01 P04 | 2min | 2 tasks | 8 files |
+| Phase 01 qi4 | 4 min | 3 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,8 @@ Recent decisions affecting current work:
 - [Phase 01]: FeatureService reactivates existing features by name instead of creating duplicates
 - [Phase 01]: Snapshot provider injected via callback to keep WsHub decoupled from FeatureService
 - [Phase 01]: activeFeature not persisted to localStorage -- always derived from server snapshot on connect
+- [Phase 01 qi4]: Vitest 4 uses test.projects (not workspace) -- plan referenced older API
+- [Phase 01 qi4]: Real dependencies over mocks for integration tests (chokidar, ws, SQLite in-memory)
 
 ### Pending Todos
 
@@ -79,6 +82,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-24T18:37:19.734Z
-Stopped at: Completed 01-04-PLAN.md
+Last session: 2026-03-24T19:13:15Z
+Stopped at: Completed 260324-qi4 (close phase 01 gaps)
 Resume file: None
