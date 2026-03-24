@@ -35,7 +35,7 @@ Plans:
 - [x] 01-01-PLAN.md -- Monorepo structure, shared types package
 - [x] 01-02-PLAN.md -- Backend: Express server, WebSocket, file watcher, SQLite, feature API
 - [x] 01-03-PLAN.md -- Frontend: Vite, Tailwind, icon rail, placeholder views, WebSocket client
-- [ ] 01-04-PLAN.md -- Gap closure: npm start script, INFRA-07 snapshot on reconnect, requirements tracking
+- [x] 01-04-PLAN.md -- Gap closure: npm start script, INFRA-07 snapshot on reconnect, requirements tracking
 **UI hint**: yes
 
 ### Phase 2: Chat + Document Editor

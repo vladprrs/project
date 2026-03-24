@@ -55,7 +55,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **INFRA-04**: Backend pushes file change events to frontend via WebSocket (ws library, channel-multiplexed protocol)
 - [x] **INFRA-05**: SQLite (better-sqlite3 + drizzle-orm) stores IDE operational state: pipeline stage, approvals, task card cache, chat history
 - [x] **INFRA-06**: Spec artifacts stored on filesystem (specs/<feature>/) as the single source of truth — SQLite is a disposable cache
-- [ ] **INFRA-07**: WebSocket reconnection with full state snapshot on reconnect (no incremental catch-up needed for single-user tool)
+- [x] **INFRA-07**: WebSocket reconnection with full state snapshot on reconnect (no incremental catch-up needed for single-user tool)
 - [x] **INFRA-08**: Single active feature at a time enforced by backend state
 - [ ] **INFRA-09**: Shareable MVP packaging: clone repo, npm install, npm start — works with user's own agent setup
 
@@ -140,7 +140,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-04 | Phase 1 | Complete |
 | INFRA-05 | Phase 1 | Complete |
 | INFRA-06 | Phase 1 | Complete |
-| INFRA-07 | Phase 1 | Pending |
+| INFRA-07 | Phase 1 | Complete |
 | INFRA-08 | Phase 1 | Complete |
 | INFRA-09 | Phase 4 | Pending |
 | UX-01 | Phase 1 | Complete |
