@@ -4,6 +4,7 @@
   "type": "module",
   "workspaces": ["packages/*"],
   "scripts": {
+    "start": "npm run dev",
     "dev": "concurrently -n backend,frontend -c blue,green \"node --import tsx/esm packages/backend/src/index.ts\" \"npm run dev -w packages/frontend\"",
     "dev:backend": "node --import tsx/esm packages/backend/src/index.ts",
     "dev:frontend": "npm run dev -w packages/frontend",

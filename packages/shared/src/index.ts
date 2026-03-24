@@ -1,6 +1,7 @@
 // Message types
 export type { FileSystemEvent, FileCreatedEvent, FileChangedEvent, FileDeletedEvent } from './messages/filesystem.js';
-export type { MessageEnvelope, FileSystemMessage } from './messages/envelope.js';
+export type { SnapshotEvent } from './messages/snapshot.js';
+export type { MessageEnvelope, FileSystemMessage, SnapshotMessage } from './messages/envelope.js';
 
 // Entity types
 export type { Feature, PipelineState, TransitionHistory, TaskCardCache, ChatMessage } from './types/feature.js';
