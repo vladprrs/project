@@ -7,6 +7,7 @@ const BASE_DELAY = 1000;
 
 export function useWebSocket() {
   const setConnectionStatus = useAppStore((s) => s.setConnectionStatus);
+  const setActiveFeature = useAppStore((s) => s.setActiveFeature);
   const wsRef = useRef<WebSocket | null>(null);
   const retriesRef = useRef(0);
 
@@ -32,7 +33,12 @@ export function useWebSocket() {
       ws.onmessage = (event) => {
         try {
           const message = JSON.parse(event.data) as MessageEnvelope;
-          console.log('[ws] Received:', message.channel, message.payload.type, (message.payload as any).path);
+          if (message.channel === 'snapshot') {
+            setActiveFeature(message.payload.activeFeature);
+            console.log('[ws] Snapshot received:', message.payload.activeFeature?.name ?? 'no active feature');
+          } else {
+            console.log('[ws] Received:', message.channel, message.payload.type, (message.payload as any).path);
+          }
         } catch (err) {
           console.error('[ws] Failed to parse message:', err);
         }
@@ -68,5 +74,5 @@ export function useWebSocket() {
         wsRef.current.close();
       }
     };
-  }, [setConnectionStatus]);
+  }, [setConnectionStatus, setActiveFeature]);
 }

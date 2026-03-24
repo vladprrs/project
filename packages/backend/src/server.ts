@@ -20,6 +20,9 @@ export function createApp() {
   const db = createDb();
   const featureService = new FeatureService(db);
 
+  // Wire snapshot provider so new WS clients receive current state
+  hub.setSnapshotProvider(() => featureService.getActive());
+
   // REST routes
   app.use('/api/features', createFeaturesRouter(featureService));
 
