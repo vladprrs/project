@@ -2,7 +2,9 @@
   "name": "specflow-ide",
   "private": true,
   "type": "module",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "start": "npm run dev",
     "dev": "concurrently -n backend,frontend -c blue,green \"node --import tsx/esm packages/backend/src/index.ts\" \"npm run dev -w packages/frontend\"",
@@ -13,8 +15,11 @@
     "test:watch": "vitest"
   },
   "devDependencies": {
-    "typescript": "^6.0.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "concurrently": "^9.2.1",
+    "happy-dom": "^20.8.7",
+    "typescript": "^6.0.2",
     "vitest": "^4.1.1"
   }
 }
