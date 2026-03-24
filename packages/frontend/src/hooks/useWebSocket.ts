@@ -18,7 +18,9 @@ export function useWebSocket() {
       if (disposed) return;
 
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
+      const backendHost = import.meta.env.VITE_BACKEND_URL
+        ?? `${protocol}//${window.location.hostname}:3001`;
+      const ws = new WebSocket(`${backendHost}/ws`);
       wsRef.current = ws;
       setConnectionStatus('reconnecting');
 
