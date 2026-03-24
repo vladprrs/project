@@ -57,14 +57,16 @@ Exceptions: none
 | Role | Size | Weight | Line Height |
 |------|------|--------|-------------|
 | Body | 16px | 400 (regular) | 1.5 |
-| Label | 14px | 500 (medium) | 1.4 |
+| Label | 14px | 400 (regular) | 1.4 |
 | Heading | 20px | 600 (semibold) | 1.2 |
 
 **Phase 1 usage:**
 - Placeholder view text ("Chat", "Docs", "Kanban"): Heading role -- 20px, semibold 600, used centered in the content area per D-07
-- Tooltip text: Label role -- 14px, medium 500
-- Connection status tooltip text: Label role -- 14px, medium 500
+- Tooltip text: Label role -- 14px, regular 400
+- Connection status tooltip text: Label role -- 14px, regular 400
 - Body role declared for forward compatibility but not used in Phase 1 placeholder views
+
+**Weight rationale:** Two weights only -- `font-normal` (400) and `font-semibold` (600) in Tailwind. Label uses regular weight because tooltip text (the only Label usage in Phase 1) does not require a mid-weight distinction; the smaller 14px size alone differentiates it from Body.
 
 ---
 
