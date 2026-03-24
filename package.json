@@ -1,0 +1,17 @@
+{
+  "name": "specflow-ide",
+  "private": true,
+  "type": "module",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c blue,green \"npm run dev -w packages/backend\" \"npm run dev -w packages/frontend\"",
+    "typecheck": "tsc -b packages/shared packages/backend packages/frontend",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.2",
+    "concurrently": "^9.2.1",
+    "vitest": "^4.1.1"
+  }
+}
