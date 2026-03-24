@@ -16,8 +16,8 @@ The IDE maps human decisions (approve, reject, refine) to concrete CLI tool invo
 
 ### Active
 
-- [ ] Chat panel invokes spec-kit CLI commands (/specify, /clarify, /plan, /tasks) via backend orchestration
-- [ ] Chat shows structured streaming events (stage transitions, progress messages, artifact creation) parsed from CLI output — not raw stdout
+- [ ] Chat panel uses Vercel AI SDK (useChat) with custom providers per coding agent (ai-sdk-provider-claude-code, ai-sdk-provider-codex-app-server, ai-sdk-provider-opencode-sdk)
+- [ ] Chat streams structured responses via AI SDK streaming protocol — agents handle spec-kit/GSD invocation internally
 - [ ] Chat messages include clickable links to created/updated artifacts that open in the doc editor
 - [ ] Document editor renders spec.md, plan.md, and tasks.md using TipTap with markdown support
 - [ ] Document editor live-reloads when artifact files change on disk (filesystem watch via backend WebSocket push)
@@ -30,9 +30,9 @@ The IDE maps human decisions (approve, reject, refine) to concrete CLI tool invo
 - [ ] Kanban cards update in real-time via WebSocket when GSD executor marks tasks done
 - [ ] GSD agent activity events (task started, attempt N, blocked) stream to kanban cards
 - [ ] WebSocket reconnection with one-time filesystem reconciliation as polling fallback
-- [ ] User-driven panel layout (resize/drag) — no auto-focus, layout stays where user puts it
+- [ ] Navigation bar with view switching between Chat, Docs, and Kanban (single active view at a time)
 - [ ] Single active feature at a time — clear focus, simple state
-- [ ] Backend spawns CLI processes, parses markdown artifacts, streams structured events via WebSocket
+- [ ] Backend serves AI SDK-compatible streaming endpoints (/api/chat) with custom providers wrapping coding agents
 - [ ] Spec artifacts stored on filesystem (specs/<feature>/) as the single source of truth
 - [ ] SQLite stores kanban task state (status, timestamps, metadata) derived from tasks.md
 - [ ] Shareable MVP: clone, npm install, npm start — works with user's own spec-kit/GSD setup
@@ -71,11 +71,11 @@ The pipeline bar makes these stages and their gates visible. Chat commands and a
 ## Constraints
 
 - **Tech stack**: React + TypeScript + Vite frontend, Node.js + TypeScript + Express backend, TipTap editor, Tailwind CSS, SQLite, WebSocket — per constitution
-- **Orchestration only**: MUST call spec-kit and GSD via CLI. Never vendor or reimplement their logic — per constitution Principle III
+- **Orchestration only**: MUST call coding agents via AI SDK providers. Agents handle spec-kit/GSD invocation. Never vendor or reimplement tool logic — per constitution Principle III
 - **File-system truth**: UI state MUST derive from spec artifacts on disk. No divergent UI state — per constitution Principle I
 - **Document-centric**: Primary panels show spec artifacts, not source code — per constitution Principle II
 - **Single feature**: One active feature at a time. No parallel feature workflows
-- **CLI parsing**: Backend parses CLI stdout/stderr into structured WebSocket events. Frontend never sees raw terminal output
+- **AI SDK streaming**: Chat uses Vercel AI SDK with custom providers per agent. Frontend uses useChat() for streaming
 
 ## Key Decisions
 
@@ -84,11 +84,12 @@ The pipeline bar makes these stages and their gates visible. Chat commands and a
 | TipTap over CodeMirror/Monaco | ProseMirror-based, markdown-native, better for document editing vs code editing | — Pending |
 | Express over Fastify | Broader ecosystem, more middleware options, team familiarity | — Pending |
 | SQLite for task state | Zero-config, file-based, sufficient for single-user localhost tool | — Pending |
-| User-driven layout over auto-focus | Simpler to implement, respects user preference, avoids jarring layout shifts | — Pending |
+| Nav bar with view switching over three-panel layout | Drastically simpler — no resize logic, no allotment, one active view at a time | — Pending |
 | Single feature scope | Eliminates concurrent state management complexity for v1 | — Pending |
 | WebSocket push over polling | Real-time kanban updates during GSD execution, with polling fallback on disconnect | — Pending |
 | Structured events over raw CLI output | Cleaner UX, enables semantic actions (clickable artifact links, progress bars) | — Pending |
 | Approval = CLI trigger | Makes implicit terminal workflow gates explicit; "Approve Plan" → run /speckit.tasks | — Pending |
+| AI SDK with custom providers over direct CLI spawn | Standardized streaming protocol, multi-agent support (Claude Code, Codex, OpenCode), agents handle tool invocation internally | — Pending |
 
 ## Evolution
 
