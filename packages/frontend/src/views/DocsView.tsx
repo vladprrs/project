@@ -3,6 +3,7 @@ import { TabBar } from '../components/docs/TabBar.js';
 import { TipTapEditor } from '../components/docs/TipTapEditor.js';
 import { EditorToolbar } from '../components/docs/EditorToolbar.js';
 import { EmptyDocs } from '../components/docs/EmptyDocs.js';
+import { DiffOverlay } from '../components/docs/DiffOverlay.js';
 import { useCallback, useRef, useEffect, useState } from 'react';
 import type { Editor } from '@tiptap/react';
 import { SearchBar } from '../components/docs/SearchBar.js';
@@ -15,10 +16,14 @@ export function DocsView() {
   const setTabMode = useAppStore((s) => s.setTabMode);
   const setTabDirty = useAppStore((s) => s.setTabDirty);
   const updateTabContent = useAppStore((s) => s.updateTabContent);
+  const diffData = useAppStore((s) => s.diffData);
+  const clearDiffData = useAppStore((s) => s.clearDiffData);
 
   const activeTab = tabs.find((t) => t.id === activeTabId);
   const editorRef = useRef<Editor | null>(null);
   const [searchVisible, setSearchVisible] = useState(false);
+
+  const activeDiff = activeTab ? diffData.get(activeTab.filePath) : undefined;
 
   const handleEditorReady = useCallback((editor: Editor) => {
     editorRef.current = editor;
@@ -76,6 +81,24 @@ export function DocsView() {
     }
   }, [activeTab, updateTabContent, setTabDirty]);
 
+  // Apply or clear diff decorations when activeDiff changes
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor || editor.isDestroyed) return;
+
+    if (activeDiff && activeDiff.length > 0) {
+      editor.commands.setDiffDecorations(activeDiff);
+    } else {
+      editor.commands.clearDiffDecorations();
+    }
+  }, [activeDiff]);
+
+  const handleDismissDiff = useCallback(() => {
+    if (!activeTab) return;
+    editorRef.current?.commands.clearDiffDecorations();
+    clearDiffData(activeTab.filePath);
+  }, [activeTab, clearDiffData]);
+
   // Ctrl+S / Cmd+S to save, Cmd+F / Ctrl+F to open search
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -113,6 +136,9 @@ export function DocsView() {
             onToggleMode={handleToggleMode}
             onSave={handleSave}
           />
+          {activeDiff && activeDiff.length > 0 && (
+            <DiffOverlay hunks={activeDiff} onDismiss={handleDismissDiff} />
+          )}
           <div className="relative flex-1 flex flex-col overflow-hidden">
             {searchVisible && editorRef.current && (
               <SearchBar

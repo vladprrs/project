@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Feature } from '@specflow/shared';
 import type { EditorTab } from '@specflow/shared';
+import type { DiffHunk } from '../lib/diff-compute.js';
 
 export type View = 'chat' | 'docs' | 'kanban';
 export type ConnectionStatus = 'connected' | 'reconnecting' | 'disconnected';
@@ -32,6 +33,11 @@ interface AppStore {
   captureSnapshot: () => void;
   getSnapshot: (filePath: string) => string | undefined;
   clearSnapshot: (filePath?: string) => void;
+
+  // Diff state per tab (Plan 04)
+  diffData: Map<string, DiffHunk[]>;
+  setDiffData: (filePath: string, hunks: DiffHunk[]) => void;
+  clearDiffData: (filePath?: string) => void;
 }
 
 function getDisplayName(filePath: string): string {
@@ -161,10 +167,32 @@ export const useAppStore = create<AppStore>()(
           return { snapshotTabs: new Map() };
         });
       },
+
+      // Diff data (Plan 04)
+      diffData: new Map(),
+
+      setDiffData: (filePath, hunks) => {
+        set((state) => {
+          const newMap = new Map(state.diffData);
+          newMap.set(filePath, hunks);
+          return { diffData: newMap };
+        });
+      },
+
+      clearDiffData: (filePath) => {
+        set((state) => {
+          if (filePath) {
+            const newMap = new Map(state.diffData);
+            newMap.delete(filePath);
+            return { diffData: newMap };
+          }
+          return { diffData: new Map() };
+        });
+      },
     }),
     {
       name: 'specflow-app',
-      // Per D-10: ONLY persist activeView. Tabs and snapshots are ephemeral.
+      // Per D-10: ONLY persist activeView. Tabs, snapshots, and diff data are ephemeral.
       partialize: (state) => ({ activeView: state.activeView }),
     }
   )

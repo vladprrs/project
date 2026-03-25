@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useAppStore } from '../store/index.js';
 import type { MessageEnvelope } from '@specflow/shared';
+import { computeDiff, hasDiffChanges } from '../lib/diff-compute.js';
 
 const MAX_RETRIES = 10;
 const BASE_DELAY = 1000;
@@ -47,9 +48,21 @@ export function useWebSocket() {
                 // Guard: do not overwrite dirty edits (conflict handled in Plan 05)
                 if (tab.mode === 'edit' && tab.isDirty) {
                   console.log(`[ws] Skipping live-reload for dirty tab: ${payload.path}`);
-                } else {
-                  store.updateTabContent(tab.id, payload.content);
+                  return;
                 }
+
+                // Diff trigger: compare snapshot (if exists) with new content
+                const snapshot = store.getSnapshot(payload.path);
+                if (snapshot !== undefined) {
+                  const hunks = computeDiff(snapshot, payload.content);
+                  if (hasDiffChanges(hunks)) {
+                    store.setDiffData(payload.path, hunks);
+                    console.log(`[ws] Diff computed for ${payload.path}: ${hunks.filter(h => h.type !== 'unchanged').length} changes`);
+                  }
+                  store.clearSnapshot(payload.path);
+                }
+
+                store.updateTabContent(tab.id, payload.content);
               }
             }
 
