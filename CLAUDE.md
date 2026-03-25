@@ -197,3 +197,14 @@ Do not make direct repo edits outside a GSD workflow unless the user explicitly 
 
 ## Recent Changes
 - 001-foundation: Added TypeScript 5.x, Node.js 20+ (LTS) + Express 4.x (backend HTTP), ws 8.x (WebSocket), React 19 (frontend), Vite 6.x (bundler), chokidar 4.x (file watching), better-sqlite3 (SQLite driver), drizzle-orm (type-safe queries), Tailwind CSS (styling)
+
+## Browser Automation
+
+Use `agent-browser` for web automation. Run `agent-browser --help` for all commands.
+
+Core workflow:
+
+1. `agent-browser open <url>` - Navigate to page
+2. `agent-browser snapshot -i` - Get interactive elements with refs (@e1, @e2)
+3. `agent-browser click @e1` / `fill @e2 "text"` - Interact using refs
+4. Re-snapshot after page changes

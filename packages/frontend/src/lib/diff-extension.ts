@@ -17,28 +17,35 @@ declare module '@tiptap/core' {
 }
 
 /**
- * Map a text offset (in plain-text terms) to a ProseMirror document position.
- * ProseMirror positions count structural tokens (nodes) in addition to text,
- * so we walk the doc to find the actual position.
+ * Build a set of line texts that were added in the diff.
+ * Each line is trimmed for fuzzy matching against ProseMirror node text.
  */
-function textOffsetToPos(doc: import('@tiptap/pm/model').Node, offset: number): number {
-  let charsSeen = 0;
-  let result = -1;
-
-  doc.descendants((node, pos) => {
-    if (result >= 0) return false; // already found
-    if (node.isText && node.text) {
-      const nodeEnd = charsSeen + node.text.length;
-      if (offset >= charsSeen && offset <= nodeEnd) {
-        result = pos + (offset - charsSeen);
-        return false;
+function getAddedLines(hunks: DiffHunk[]): Set<string> {
+  const added = new Set<string>();
+  for (const hunk of hunks) {
+    if (hunk.type === 'added') {
+      const lines = hunk.value.split('\n');
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.length > 0) {
+          // Strip common markdown syntax for matching against rendered text
+          const cleaned = trimmed
+            .replace(/^#{1,6}\s+/, '')   // headings
+            .replace(/^\*\*(.+?)\*\*/, '$1') // bold
+            .replace(/^\*(.+?)\*/, '$1')     // italic
+            .replace(/^[-*+]\s+/, '')        // list items
+            .replace(/^\d+\.\s+/, '')        // ordered list items
+            .replace(/^>\s+/, '')            // blockquotes
+            .replace(/^```\w*$/, '')         // code fences
+            .trim();
+          if (cleaned.length > 0) {
+            added.add(cleaned);
+          }
+        }
       }
-      charsSeen = nodeEnd;
     }
-    return true; // continue traversal
-  });
-
-  return result;
+  }
+  return added;
 }
 
 export const DiffExtension = Extension.create({
@@ -75,35 +82,23 @@ export const DiffExtension = Extension.create({
 
           const doc = editor.state.doc;
           const decorations: Decoration[] = [];
-          const docText = doc.textContent;
+          const addedLines = getAddedLines(hunks);
 
-          // Walk through the 'after' content (which matches the current doc)
-          // and create decorations for added regions.
-          // textOffset tracks position in the plain-text representation.
-          let textOffset = 0;
-          for (const hunk of hunks) {
-            if (hunk.type === 'added') {
-              const hunkText = hunk.value.trimEnd();
-              const startIdx = docText.indexOf(hunkText, textOffset);
-              if (startIdx >= 0) {
-                const endIdx = startIdx + hunkText.length;
-                const from = textOffsetToPos(doc, startIdx);
-                const to = textOffsetToPos(doc, endIdx);
+          // Walk top-level block nodes and decorate those whose text
+          // matches any added line from the diff.
+          doc.forEach((node, offset) => {
+            const nodeText = node.textContent.trim();
+            if (nodeText.length === 0) return;
 
-                if (from >= 0 && to >= 0 && to > from) {
-                  decorations.push(
-                    Decoration.inline(from, to, {
-                      class: 'diff-added',
-                    }),
-                  );
-                }
-              }
-              textOffset += hunk.value.length;
-            } else if (hunk.type === 'unchanged') {
-              textOffset += hunk.value.length;
+            if (addedLines.has(nodeText)) {
+              // Use node decoration to highlight the entire block
+              decorations.push(
+                Decoration.node(offset, offset + node.nodeSize, {
+                  class: 'diff-added',
+                }),
+              );
             }
-            // 'removed' hunks don't have positions in the current document
-          }
+          });
 
           const decoSet = DecorationSet.create(doc, decorations);
           tr.setMeta(diffPluginKey, { decorations: decoSet });

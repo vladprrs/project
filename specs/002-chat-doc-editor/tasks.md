@@ -15,10 +15,11 @@
 
 **Purpose**: Install new dependencies and extend shared type contracts
 
-- [ ] T001 Install TipTap dependencies in packages/frontend: @tiptap/react, @tiptap/starter-kit, @tiptap/pm, tiptap-markdown, @tiptap/extension-task-list, @tiptap/extension-task-item, @tiptap/extension-placeholder, @tiptap/extension-code-block-lowlight, lowlight
-  - **Note:** TipTap not installed — Phase 2 used react-markdown + rehype-highlight for read-only viewer instead. TipTap deferred to edit mode phase.
+- [x] T001 Install TipTap dependencies in packages/frontend: @tiptap/react, @tiptap/starter-kit, @tiptap/pm, tiptap-markdown, @tiptap/extension-task-list, @tiptap/extension-task-item, @tiptap/extension-placeholder, @tiptap/extension-code-block-lowlight, lowlight
+  - **Note:** All TipTap packages installed at v3.20.5 + lowlight@3.3.0 during Phase 02.1 (edit mode).
 - [x] T002 Install AI SDK dependencies: `ai` and `@ai-sdk/react` in packages/frontend, `ai` and `@ai-sdk/anthropic` in packages/backend
-- [ ] T003 Install `diff` library in packages/frontend for text diffing
+- [x] T003 Install `diff` library in packages/frontend for text diffing
+  - **Note:** diff@^8.0.4 + @types/diff@^8.0.0 installed, used in lib/diff-compute.ts.
 - [x] T004 Add chat and file API contract types (ChatStreamRequest, GetChatMessagesRequest, GetChatMessagesResponse, SaveChatMessageRequest, SaveChatMessageResponse, SaveFileRequest, SaveFileResponse, ReadFileRequest, ReadFileResponse) to packages/shared/src/types/api.ts and export from packages/shared/src/index.ts
 
 ---
@@ -74,8 +75,8 @@
   - **Note:** Implemented as MarkdownViewer.tsx using react-markdown + remark-gfm + rehype-highlight (read-only). TipTap editor deferred to edit mode phase.
 - [x] T017 [P] [US2] Create EditorTabs component: render tab bar from Zustand tabs array, active tab highlighting, close button per tab, scrollable overflow when tabs exceed container width, empty state when no tabs open in packages/frontend/src/components/editor/EditorTabs.tsx
   - **Note:** Implemented as TabBar.tsx in components/docs/.
-- [ ] T018 [US2] Create EditorToolbar component with read-only/edit mode toggle button that calls setTabMode on the active tab, visual indication of current mode (lock icon for read-only, pencil for edit) in packages/frontend/src/components/editor/EditorToolbar.tsx
-  - **Note:** Deferred — Phase 2 is read-only only per D-04 decision.
+- [x] T018 [US2] Create EditorToolbar component with read-only/edit mode toggle button that calls setTabMode on the active tab, visual indication of current mode (lock icon for read-only, pencil for edit) in packages/frontend/src/components/editor/EditorToolbar.tsx
+  - **Note:** Implemented in components/docs/EditorToolbar.tsx during Phase 02.1. Lock/pencil icons, save button, mode toggle all functional.
 - [x] T019 [US2] Rewrite DocsView to compose EditorTabs, EditorToolbar, and MarkdownEditor; wire tab switching to load content into editor; set editor.setEditable(false) for read-only mode and editor.setEditable(true) for edit mode in packages/frontend/src/views/DocsView.tsx
   - **Note:** DocsView composes TabBar + MarkdownViewer + EmptyDocs. Read-only only (no toolbar/edit mode).
 
@@ -143,8 +144,10 @@
 
 ### Implementation for User Story 6
 
-- [ ] T027 [US6] Add save functionality to EditorToolbar: save button (visible in edit mode only) and Ctrl+S/Cmd+S keyboard shortcut that serializes TipTap content to markdown via tiptap-markdown and sends to POST /api/files/save; suppress file watcher triggering for self-initiated saves in packages/frontend/src/components/editor/EditorToolbar.tsx
-- [ ] T028 [US6] Add in-document search: Cmd+F/Ctrl+F keyboard handler that opens a search bar overlay within the editor, using TipTap's built-in search extension or a ProseMirror find-text approach with highlight decorations for matches in packages/frontend/src/components/editor/MarkdownEditor.tsx
+- [~] T027 [US6] Add save functionality to EditorToolbar: save button (visible in edit mode only) and Ctrl+S/Cmd+S keyboard shortcut that serializes TipTap content to markdown via tiptap-markdown and sends to POST /api/files/save; suppress file watcher triggering for self-initiated saves in packages/frontend/src/components/editor/EditorToolbar.tsx
+  - **Note:** ~80% done — Ctrl+S, save button, POST /api/files/save all work. Backend recentlySaved suppression exists. Missing: frontend-side self-save guard.
+- [x] T028 [US6] Add in-document search: Cmd+F/Ctrl+F keyboard handler that opens a search bar overlay within the editor, using TipTap's built-in search extension or a ProseMirror find-text approach with highlight decorations for matches in packages/frontend/src/components/editor/MarkdownEditor.tsx
+  - **Note:** Implemented in SearchBar.tsx + lib/search-extension.ts using prosemirror-search. Cmd+F opens overlay, Enter/Shift+Enter for next/prev, Escape to close.
 - [ ] T029 [US6] Implement conflict warning: when editor is in edit mode with unsaved changes (isDirty=true) and a filesystem `changed` event arrives for the active tab, show a banner/dialog offering "Reload from disk" or "Keep my changes" instead of silently updating in packages/frontend/src/components/editor/MarkdownEditor.tsx
 - [ ] T030 [US6] Implement unsaved changes prompt: when user toggles from edit mode back to read-only mode with isDirty=true, prompt "Save changes?" / "Discard changes" before switching mode in packages/frontend/src/components/editor/EditorToolbar.tsx
 
@@ -160,10 +163,14 @@
 
 ### Implementation for User Story 7
 
-- [ ] T031 [P] [US7] Create diff-compute utility: accepts two markdown strings (before/after), uses the `diff` library's diffLines() to compute line-level changes, returns an array of diff hunks with type (added/removed/unchanged) and line ranges in packages/frontend/src/lib/diff-compute.ts
-- [ ] T032 [P] [US7] Create DiffOverlay component: accepts diff hunks and the TipTap editor instance, maps hunks to ProseMirror Decoration.inline() decorations with CSS classes (green background for additions, red background with strikethrough for deletions), provides a dismiss button that clears all decorations in packages/frontend/src/components/editor/DiffOverlay.tsx
-- [ ] T033 [US7] Implement snapshot capture: when a chat message is submitted in ChatView, snapshot the current content of all open editor tabs (store as Map<filePath, content> keyed by the message ID) in packages/frontend/src/views/ChatView.tsx
-- [ ] T034 [US7] Wire diff trigger: when a filesystem `changed` event arrives after an agent response completes, compare the snapshot content against the new file content using diff-compute, activate DiffOverlay in the editor for that tab in packages/frontend/src/views/DocsView.tsx
+- [x] T031 [P] [US7] Create diff-compute utility: accepts two markdown strings (before/after), uses the `diff` library's diffLines() to compute line-level changes, returns an array of diff hunks with type (added/removed/unchanged) and line ranges in packages/frontend/src/lib/diff-compute.ts
+  - **Note:** Implemented in lib/diff-compute.ts with computeDiff() + hasDiffChanges().
+- [x] T032 [P] [US7] Create DiffOverlay component: accepts diff hunks and the TipTap editor instance, maps hunks to ProseMirror Decoration.inline() decorations with CSS classes (green background for additions, red background with strikethrough for deletions), provides a dismiss button that clears all decorations in packages/frontend/src/components/editor/DiffOverlay.tsx
+  - **Note:** Implemented in DiffOverlay.tsx + lib/diff-extension.ts. Green decorations for additions, banner with counts, dismiss button.
+- [x] T033 [US7] Implement snapshot capture: when a chat message is submitted in ChatView, snapshot the current content of all open editor tabs (store as Map<filePath, content> keyed by the message ID) in packages/frontend/src/views/ChatView.tsx
+  - **Note:** captureSnapshot() in Zustand store, called in ChatView.handleSend() before message submission.
+- [x] T034 [US7] Wire diff trigger: when a filesystem `changed` event arrives after an agent response completes, compare the snapshot content against the new file content using diff-compute, activate DiffOverlay in the editor for that tab in packages/frontend/src/views/DocsView.tsx
+  - **Note:** useWebSocket.ts computes diff on filesystem:changed when snapshot exists, stores via setDiffData(). DocsView applies decorations and renders DiffOverlay.
 
 **Checkpoint**: Rejection-feedback cycle shows inline diff markers. User can dismiss diffs to return to clean view.
 
