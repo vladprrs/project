@@ -3,8 +3,9 @@ import { TabBar } from '../components/docs/TabBar.js';
 import { TipTapEditor } from '../components/docs/TipTapEditor.js';
 import { EditorToolbar } from '../components/docs/EditorToolbar.js';
 import { EmptyDocs } from '../components/docs/EmptyDocs.js';
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useEffect, useState } from 'react';
 import type { Editor } from '@tiptap/react';
+import { SearchBar } from '../components/docs/SearchBar.js';
 
 export function DocsView() {
   const tabs = useAppStore((s) => s.tabs);
@@ -13,9 +14,11 @@ export function DocsView() {
   const closeTab = useAppStore((s) => s.closeTab);
   const setTabMode = useAppStore((s) => s.setTabMode);
   const setTabDirty = useAppStore((s) => s.setTabDirty);
+  const updateTabContent = useAppStore((s) => s.updateTabContent);
 
   const activeTab = tabs.find((t) => t.id === activeTabId);
   const editorRef = useRef<Editor | null>(null);
+  const [searchVisible, setSearchVisible] = useState(false);
 
   const handleEditorReady = useCallback((editor: Editor) => {
     editorRef.current = editor;
@@ -46,6 +49,49 @@ export function DocsView() {
     [activeTab],
   );
 
+  const handleSave = useCallback(async () => {
+    if (!activeTab || !activeTab.isDirty) return;
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    const markdown = editor.getMarkdown();
+
+    try {
+      const res = await fetch('/api/files/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filePath: activeTab.filePath, content: markdown }),
+      });
+      if (!res.ok) {
+        const err = await res.json() as { error: string };
+        console.error('[save] Failed:', err.error);
+        return;
+      }
+      // Update store: save the serialized content and reset dirty flag
+      updateTabContent(activeTab.id, markdown);
+      setTabDirty(activeTab.id, false);
+      console.log('[save] Saved:', activeTab.filePath);
+    } catch (err) {
+      console.error('[save] Network error:', err);
+    }
+  }, [activeTab, updateTabContent, setTabDirty]);
+
+  // Ctrl+S / Cmd+S to save, Cmd+F / Ctrl+F to open search
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+        e.preventDefault();
+        handleSave();
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'f') {
+        e.preventDefault();
+        setSearchVisible(true);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [handleSave]);
+
   // Empty state: no tabs open
   if (tabs.length === 0) {
     return <EmptyDocs />;
@@ -65,14 +111,26 @@ export function DocsView() {
             mode={activeTab.mode}
             isDirty={activeTab.isDirty}
             onToggleMode={handleToggleMode}
+            onSave={handleSave}
           />
-          <TipTapEditor
-            key={activeTab.id}
-            content={activeTab.content}
-            editable={activeTab.mode === 'edit'}
-            onUpdate={handleUpdate}
-            onEditorReady={handleEditorReady}
-          />
+          <div className="relative flex-1 flex flex-col overflow-hidden">
+            {searchVisible && editorRef.current && (
+              <SearchBar
+                editor={editorRef.current}
+                onClose={() => {
+                  setSearchVisible(false);
+                  editorRef.current?.commands.clearSearch();
+                }}
+              />
+            )}
+            <TipTapEditor
+              key={activeTab.id}
+              content={activeTab.content}
+              editable={activeTab.mode === 'edit'}
+              onUpdate={handleUpdate}
+              onEditorReady={handleEditorReady}
+            />
+          </div>
         </>
       ) : (
         <EmptyDocs />
