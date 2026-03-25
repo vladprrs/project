@@ -58,6 +58,29 @@ Plans:
 - [ ] 02-05-PLAN.md -- Integration wiring: persistence, cross-panel navigation, full-stack verification
 **UI hint**: yes
 
+### Phase 02.1: Editor Edit Mode + Diff View -- TipTap migration, edit/save/search, inline diff markers for rejection feedback (INSERTED)
+
+**Goal:** Replace the react-markdown read-only viewer with TipTap 3, add edit mode with save/undo-redo/search, implement inline diff overlay for rejection feedback, and add edit-mode safeguards (conflict warning, unsaved changes prompt)
+**Requirements**: EDIT-05, EDIT-06, EDIT-07, EDIT-08
+**Depends on:** Phase 2
+**Success Criteria** (what must be TRUE):
+  1. TipTap editor renders markdown documents with full fidelity (headings, lists, code blocks, tables, checkboxes) -- matching react-markdown output quality
+  2. Editor defaults to read-only mode with a visible toggle to switch to edit mode
+  3. In edit mode, user can type changes, undo/redo works, and Ctrl+S saves the document to disk via POST /api/files/save
+  4. Cmd+F opens in-document search with match highlighting and next/prev navigation
+  5. After submitting chat feedback and an agent revises an artifact, the editor shows inline green diff markers on changed text with a dismissable banner
+  6. Conflict warning appears when user has unsaved edits and the file changes on disk
+  7. Unsaved changes prompt appears when toggling from edit to read-only mode with dirty content
+**Plans**: 5 plans
+
+Plans:
+- [ ] 02.1-01-PLAN.md -- Dependencies, shared types, backend POST /api/files/save with watcher suppression
+- [ ] 02.1-02-PLAN.md -- TipTapEditor component, Zustand store extensions, EditorToolbar, DocsView rewrite
+- [ ] 02.1-03-PLAN.md -- Save functionality (Ctrl+S) and in-document search (Cmd+F)
+- [ ] 02.1-04-PLAN.md -- Diff view: diff-compute, DiffOverlay, snapshot capture, filesystem wiring
+- [ ] 02.1-05-PLAN.md -- Edit-mode safeguards, tab bar overflow, live-reload search, end-to-end verification
+**UI hint**: yes
+
 ### Phase 3: Pipeline + Kanban
 **Goal**: Users can see where they are in the spec-first lifecycle via a pipeline bar with approval gates, and view task progress on a kanban board that updates in real-time as agents execute
 **Depends on**: Phase 2
@@ -89,11 +112,12 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4
+Phases execute in numeric order: 1 -> 2 -> 2.1 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete | 2026-03-24 |
 | 2. Chat + Document Editor | 4/5 | In Progress|  |
+| 2.1 Editor Edit Mode + Diff View | 0/5 | Not started | - |
 | 3. Pipeline + Kanban | 0/0 | Not started | - |
 | 4. Integration + Polish | 0/0 | Not started | - |
