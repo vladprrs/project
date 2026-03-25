@@ -6,7 +6,10 @@ import { WsHub } from './ws/hub.js';
 import { createFileWatcher } from './watcher/file-watcher.js';
 import { createDb } from './db/client.js';
 import { FeatureService } from './services/feature.js';
+import { ChatService } from './services/chat.js';
 import { createFeaturesRouter } from './api/features.js';
+import { createChatRouter } from './api/chat.js';
+import { createFilesRouter } from './api/files.js';
 
 export function createApp() {
   const app = express();
@@ -19,12 +22,15 @@ export function createApp() {
   // Database
   const db = createDb();
   const featureService = new FeatureService(db);
+  const chatService = new ChatService(db);
 
   // Wire snapshot provider so new WS clients receive current state
   hub.setSnapshotProvider(() => featureService.getActive());
 
   // REST routes
   app.use('/api/features', createFeaturesRouter(featureService));
+  app.use('/api/chat', createChatRouter(chatService));
+  app.use('/api/files', createFilesRouter());
 
   // Health check
   app.get('/api/health', (_req, res) => {
@@ -48,5 +54,5 @@ export function createApp() {
   const specsDir = resolve(monorepoRoot, 'specs');
   createFileWatcher(specsDir, (message) => hub.broadcast(message));
 
-  return { app, server, hub, db };
+  return { app, server, hub, db, chatService };
 }

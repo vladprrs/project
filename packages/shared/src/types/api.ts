@@ -1,4 +1,4 @@
-import type { Feature } from './feature.js';
+import type { Feature, ChatMessage } from './feature.js';
 
 // GET /api/features/active
 export interface GetActiveFeatureResponse {
@@ -29,4 +29,30 @@ export interface DeactivateFeatureResponse {
 // Error responses
 export interface ApiError {
   error: string;
+}
+
+// GET /api/chat/messages response
+export interface ChatMessagesListResponse {
+  messages: ChatMessage[];
+  nextCursor: string | null;
+  hasMore: boolean;
+}
+
+// POST /api/chat/messages request
+export interface SaveChatMessageRequest {
+  featureId: string;
+  role: 'user' | 'assistant';
+  content: string;
+  metadata?: string | null;
+}
+
+// POST /api/chat/messages response
+export interface ChatMessageResponse {
+  message: ChatMessage;
+}
+
+// GET /api/files/read response
+export interface ReadFileResponse {
+  path: string;
+  content: string;
 }
