@@ -38,6 +38,12 @@ interface AppStore {
   diffData: Map<string, DiffHunk[]>;
   setDiffData: (filePath: string, hunks: DiffHunk[]) => void;
   clearDiffData: (filePath?: string) => void;
+
+  // Conflict state: when a dirty tab receives a filesystem:changed event (Plan 05)
+  conflictFilePath: string | null;
+  conflictContent: string | null;
+  setConflict: (filePath: string, content: string) => void;
+  clearConflict: () => void;
 }
 
 function getDisplayName(filePath: string): string {
@@ -189,6 +195,12 @@ export const useAppStore = create<AppStore>()(
           return { diffData: new Map() };
         });
       },
+
+      // Conflict state (Plan 05)
+      conflictFilePath: null,
+      conflictContent: null,
+      setConflict: (filePath, content) => set({ conflictFilePath: filePath, conflictContent: content }),
+      clearConflict: () => set({ conflictFilePath: null, conflictContent: null }),
     }),
     {
       name: 'specflow-app',

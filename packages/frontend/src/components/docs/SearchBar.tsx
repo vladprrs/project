@@ -1,15 +1,16 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Search, X, ChevronUp, ChevronDown } from 'lucide-react';
 import type { Editor } from '@tiptap/react';
 import { findNext, findPrev } from 'prosemirror-search';
 
 interface SearchBarProps {
   editor: Editor;
+  query: string;
+  onQueryChange: (query: string) => void;
   onClose: () => void;
 }
 
-export function SearchBar({ editor, onClose }: SearchBarProps) {
-  const [query, setQuery] = useState('');
+export function SearchBar({ editor, query, onQueryChange, onClose }: SearchBarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Auto-focus on mount
@@ -19,7 +20,7 @@ export function SearchBar({ editor, onClose }: SearchBarProps) {
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setQuery(value);
+    onQueryChange(value);
     editor.commands.setSearchQuery(value);
   };
 

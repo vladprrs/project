@@ -19,9 +19,15 @@ export function DocsView() {
   const diffData = useAppStore((s) => s.diffData);
   const clearDiffData = useAppStore((s) => s.clearDiffData);
 
+  // Conflict state (Plan 05)
+  const conflictFilePath = useAppStore((s) => s.conflictFilePath);
+  const conflictContent = useAppStore((s) => s.conflictContent);
+  const clearConflict = useAppStore((s) => s.clearConflict);
+
   const activeTab = tabs.find((t) => t.id === activeTabId);
   const editorRef = useRef<Editor | null>(null);
   const [searchVisible, setSearchVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const activeDiff = activeTab ? diffData.get(activeTab.filePath) : undefined;
   const activeDiffRef = useRef(activeDiff);
@@ -39,17 +45,6 @@ export function DocsView() {
       });
     }
   }, []);
-
-  const handleToggleMode = useCallback(() => {
-    if (!activeTab) return;
-    if (activeTab.mode === 'read') {
-      setTabMode(activeTab.id, 'edit');
-    } else {
-      // Switch back to read-only (conflict/unsaved prompts added in Plan 05)
-      setTabMode(activeTab.id, 'read');
-      setTabDirty(activeTab.id, false);
-    }
-  }, [activeTab, setTabMode, setTabDirty]);
 
   const handleUpdate = useCallback(
     (markdown: string) => {
@@ -92,6 +87,45 @@ export function DocsView() {
     }
   }, [activeTab, updateTabContent, setTabDirty]);
 
+  const handleToggleMode = useCallback(() => {
+    if (!activeTab) return;
+
+    if (activeTab.mode === 'edit' && activeTab.isDirty) {
+      // Prompt: save or discard before switching to read mode
+      const shouldSave = window.confirm(
+        'You have unsaved changes. Click OK to save before switching to read-only, or Cancel to discard changes.'
+      );
+      if (shouldSave) {
+        // Save first, then switch mode
+        handleSave().then(() => {
+          setTabMode(activeTab.id, 'read');
+        });
+        return;
+      } else {
+        // Discard: reset dirty and switch mode
+        setTabDirty(activeTab.id, false);
+      }
+    }
+
+    const newMode = activeTab.mode === 'read' ? 'edit' : 'read';
+    setTabMode(activeTab.id, newMode);
+  }, [activeTab, handleSave, setTabMode, setTabDirty]);
+
+  // Conflict resolution handlers (Plan 05)
+  const handleReloadFromDisk = useCallback(() => {
+    if (!activeTab || !conflictContent) return;
+    // Accept disk version: update content, reset dirty, switch to read mode
+    updateTabContent(activeTab.id, conflictContent);
+    setTabDirty(activeTab.id, false);
+    setTabMode(activeTab.id, 'read');
+    clearConflict();
+  }, [activeTab, conflictContent, updateTabContent, setTabDirty, setTabMode, clearConflict]);
+
+  const handleKeepMyChanges = useCallback(() => {
+    // Dismiss the warning, keep editing
+    clearConflict();
+  }, [clearConflict]);
+
   // Apply or clear diff decorations when activeDiff changes while editor is mounted
   useEffect(() => {
     const editor = editorRef.current;
@@ -126,6 +160,13 @@ export function DocsView() {
     return () => window.removeEventListener('keydown', handler);
   }, [handleSave]);
 
+  // Live-reload during search: re-run search query when content updates
+  useEffect(() => {
+    if (searchVisible && editorRef.current && searchQuery) {
+      editorRef.current.commands.setSearchQuery(searchQuery);
+    }
+  }, [activeTab?.content, searchVisible, searchQuery]);
+
   // Empty state: no tabs open
   if (tabs.length === 0) {
     return <EmptyDocs />;
@@ -147,6 +188,26 @@ export function DocsView() {
             onToggleMode={handleToggleMode}
             onSave={handleSave}
           />
+          {conflictFilePath && activeTab && conflictFilePath === activeTab.filePath && (
+            <div className="flex items-center gap-2 px-3 py-2 bg-amber-50 border-b border-amber-200 text-xs text-amber-800">
+              <span className="font-medium">File changed on disk.</span>
+              <span>This document was modified externally while you have unsaved changes.</span>
+              <div className="ml-auto flex items-center gap-2">
+                <button
+                  onClick={handleReloadFromDisk}
+                  className="px-2 py-1 bg-amber-200 hover:bg-amber-300 rounded text-amber-900 font-medium"
+                >
+                  Reload from disk
+                </button>
+                <button
+                  onClick={handleKeepMyChanges}
+                  className="px-2 py-1 hover:bg-amber-100 rounded"
+                >
+                  Keep my changes
+                </button>
+              </div>
+            </div>
+          )}
           {activeDiff && activeDiff.length > 0 && (
             <DiffOverlay hunks={activeDiff} onDismiss={handleDismissDiff} />
           )}
@@ -154,8 +215,11 @@ export function DocsView() {
             {searchVisible && editorRef.current && (
               <SearchBar
                 editor={editorRef.current}
+                query={searchQuery}
+                onQueryChange={setSearchQuery}
                 onClose={() => {
                   setSearchVisible(false);
+                  setSearchQuery('');
                   editorRef.current?.commands.clearSearch();
                 }}
               />

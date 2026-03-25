@@ -45,24 +45,25 @@ export function useWebSocket() {
               // Update tab content if this file is open (EDIT-02: live-reload)
               const tab = store.tabs.find((t) => t.filePath === payload.path);
               if (tab) {
-                // Guard: do not overwrite dirty edits (conflict handled in Plan 05)
+                // Guard: do not overwrite dirty edits -- signal conflict instead
                 if (tab.mode === 'edit' && tab.isDirty) {
-                  console.log(`[ws] Skipping live-reload for dirty tab: ${payload.path}`);
-                  return;
-                }
-
-                // Diff trigger: compare snapshot (if exists) with new content
-                const snapshot = store.getSnapshot(payload.path);
-                if (snapshot !== undefined) {
-                  const hunks = computeDiff(snapshot, payload.content);
-                  if (hasDiffChanges(hunks)) {
-                    store.setDiffData(payload.path, hunks);
-                    console.log(`[ws] Diff computed for ${payload.path}: ${hunks.filter(h => h.type !== 'unchanged').length} changes`);
+                  store.setConflict(payload.path, payload.content);
+                  console.log(`[ws] Conflict: dirty tab ${payload.path} changed on disk`);
+                  // Don't update tab content -- let the user choose via conflict banner
+                } else {
+                  // Diff trigger: compare snapshot (if exists) with new content
+                  const snapshot = store.getSnapshot(payload.path);
+                  if (snapshot !== undefined) {
+                    const hunks = computeDiff(snapshot, payload.content);
+                    if (hasDiffChanges(hunks)) {
+                      store.setDiffData(payload.path, hunks);
+                      console.log(`[ws] Diff computed for ${payload.path}: ${hunks.filter(h => h.type !== 'unchanged').length} changes`);
+                    }
+                    store.clearSnapshot(payload.path);
                   }
-                  store.clearSnapshot(payload.path);
-                }
 
-                store.updateTabContent(tab.id, payload.content);
+                  store.updateTabContent(tab.id, payload.content);
+                }
               }
             }
 
