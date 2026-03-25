@@ -34,8 +34,8 @@ export function ChatView() {
     // Persist user message
     persistMessage('user', text);
 
-    // Send via AI SDK v6 -- sendMessage takes { content: string } for text protocol
-    sendMessage({ content: text });
+    // Send via AI SDK v6 -- sendMessage takes { text: string } for text protocol
+    sendMessage({ text });
   }, [input, isProcessing, sendMessage, persistMessage]);
 
   const handleRetry = useCallback(() => {

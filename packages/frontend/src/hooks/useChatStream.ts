@@ -1,11 +1,20 @@
 import { useChat } from '@ai-sdk/react';
 import { TextStreamChatTransport } from 'ai';
 import { useAppStore } from '../store/index.js';
-import { useEffect, useCallback, useMemo, useState } from 'react';
+import { useEffect, useCallback, useMemo, useRef, useState } from 'react';
 
 export function useChatStream() {
   const activeFeature = useAppStore((s) => s.activeFeature);
   const [input, setInput] = useState('');
+
+  // Use a ref to track activeFeature so onFinish always has the current value.
+  // Without this, if the user switches features mid-stream, the onFinish
+  // callback would capture the stale activeFeature from when useChat was
+  // configured, persisting the message under the wrong featureId.
+  const activeFeatureRef = useRef(activeFeature);
+  useEffect(() => {
+    activeFeatureRef.current = activeFeature;
+  }, [activeFeature]);
 
   // TextStreamChatTransport for text SSE protocol (per D-01/D-03)
   const transport = useMemo(
@@ -21,6 +30,26 @@ export function useChatStream() {
     transport,
     onError: (error) => {
       console.error('[chat] Stream error:', error.message);
+    },
+    onFinish: ({ message }) => {
+      // Persist completed assistant message per D-08
+      // Use activeFeatureRef.current to avoid stale closure if user
+      // switched features during streaming
+      const textContent = message.parts
+        .filter((p) => p.type === 'text' && 'text' in p)
+        .map((p) => (p as { type: 'text'; text: string }).text)
+        .join('');
+      if (textContent && activeFeatureRef.current?.id) {
+        fetch('/api/chat/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            featureId: activeFeatureRef.current.id,
+            role: 'assistant',
+            content: textContent,
+          }),
+        }).catch((err) => console.error('[chat] Failed to persist assistant message:', err));
+      }
     },
   });
 
