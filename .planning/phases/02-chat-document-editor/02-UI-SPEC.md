@@ -37,11 +37,11 @@ Declared values (must be multiples of 4):
 | sm | 8px | Chat message internal padding, tab bar item gap, compact element spacing |
 | md | 16px | Default panel padding, chat input padding, message vertical gap |
 | lg | 24px | Section padding within views, document viewer horizontal padding |
-| xl | 32px | Chat message area top/bottom padding, tab bar height |
-| 2xl | 48px | Empty state icon-to-text gap |
+| xl | 32px | Chat message area top/bottom padding |
+| 2xl | 48px | Tab bar height, chat input area fixed height, empty state icon-to-text gap |
 | 3xl | 64px | Not used in Phase 2 |
 
-Exceptions: Icon rail width remains 48px (`w-12`) as established in Phase 1. Chat input area fixed height of 56px (accommodates 16px padding + 24px line-height input).
+Exceptions: Icon rail width remains 48px (`w-12`) as established in Phase 1.
 
 ---
 
@@ -50,15 +50,17 @@ Exceptions: Icon rail width remains 48px (`w-12`) as established in Phase 1. Cha
 | Role | Size | Weight | Line Height | Usage |
 |------|------|--------|-------------|-------|
 | Body | 14px | 400 (regular) | 1.5 (21px) | Chat messages, document prose body text |
-| Label | 12px | 500 (medium) | 1.33 (16px) | Tab names, timestamps, status text, "Load more" link |
+| Label | 12px | 600 (semibold) | 1.33 (16px) | Tab names, timestamps, status text, "Load more" link |
 | Heading | 18px | 600 (semibold) | 1.33 (24px) | Empty state headings, view section titles |
 | Mono | 13px | 400 (regular) | 1.5 (19.5px) | Code blocks in chat messages and document viewer |
 
 Tailwind classes:
 - Body: `text-sm font-normal leading-relaxed` (14px / 400 / 1.5)
-- Label: `text-xs font-medium leading-tight` (12px / 500 / 1.33)
+- Label: `text-xs font-semibold leading-tight` (12px / 600 / 1.33)
 - Heading: `text-lg font-semibold leading-snug` (18px / 600 / 1.33)
 - Mono: `font-mono text-[13px] leading-relaxed`
+
+Weights used: 400 (regular) for body and mono, 600 (semibold) for labels and headings. Two weights total.
 
 Document viewer prose typography is handled by `@tailwindcss/typography` plugin with `prose prose-sm prose-zinc` classes. The plugin provides its own heading scale (h1-h6), list styles, table styles, and code block styles within the rendered markdown. No custom overrides needed.
 
@@ -74,14 +76,14 @@ Document viewer prose typography is handled by `@tailwindcss/typography` plugin 
 | Text primary | #18181b | `text-zinc-900` | Chat message text, document body text, active tab label |
 | Text secondary | #71717a | `text-zinc-500` | Timestamps, placeholder text, inactive tab labels, secondary info |
 | Text muted | #a1a1aa | `text-zinc-400` | Empty state text, disabled states (inherited from Phase 1 placeholder views) |
-| Accent (10%) | #2563eb | `text-blue-600` / `bg-blue-600` | Artifact link text in chat, "Send" button background, active streaming indicator dot |
-| Accent hover | #1d4ed8 | `hover:bg-blue-700` | Send button hover state |
+| Accent (10%) | #2563eb | `text-blue-600` / `bg-blue-600` | Artifact link text in chat, "Send Message" button background, active streaming indicator dot |
+| Accent hover | #1d4ed8 | `hover:bg-blue-700` | Send Message button hover state |
 | Accent light | #dbeafe | `bg-blue-50` | User message bubble background |
 | Destructive | #dc2626 | `text-red-600` | Error message text, disconnected status dot |
 | Success | #16a34a | `text-green-600` / `bg-green-500` | Connected status dot (inherited from Phase 1) |
 | Warning | #d97706 | `text-amber-600` / `bg-amber-500` | Reconnecting status dot (inherited from Phase 1) |
 
-Accent reserved for: artifact link text in chat messages, Send button, active streaming indicator pulse, chat input focus ring (`focus:ring-blue-500`). NOT used for tab active state (tabs use `border-b-2 border-zinc-900` for active, keeping accent strictly for interactive/actionable elements).
+Accent reserved for: artifact link text in chat messages, Send Message button, active streaming indicator pulse, chat input focus ring (`focus:ring-blue-500`). NOT used for tab active state (tabs use `border-b-2 border-zinc-900` for active, keeping accent strictly for interactive/actionable elements).
 
 Source: zinc palette inherited from Phase 1 (`IconRail.tsx`, `ConnectionDot.tsx`). Blue accent chosen for action contrast against the neutral zinc surface.
 
@@ -96,7 +98,7 @@ Source: zinc palette inherited from Phase 1 (`IconRail.tsx`, `ConnectionDot.tsx`
 | `ChatView` | Full-height flex column: message list (scrollable, flex-1) + input area (fixed bottom) | ready, empty, error |
 | `ChatHistory` | Scrollable message list with auto-scroll-to-bottom on new messages. "Load more" link at top when `hasMore` is true | messages loaded, loading more, empty |
 | `ChatMessage` | Single message row. User messages right-aligned with blue-50 background. Assistant messages left-aligned with no background (white). Displays message text with artifact link detection. | user, assistant, streaming (assistant only) |
-| `ChatInput` | Text input with Send button. Input disabled during streaming. Send button disabled when input is empty or during streaming. | idle, submitting, streaming (disabled), error |
+| `ChatInput` | Text input with Send Message button. Input disabled during streaming. Send Message button disabled when input is empty or during streaming. | idle, submitting, streaming (disabled), error |
 | `ActivityIndicator` | Inline indicator below the last assistant message during streaming. Pulsing dot + status text. | submitted ("Thinking..."), streaming ("Generating response...") |
 | `ErrorBanner` | Dismissible banner above the input area showing error message + "Retry" button. | visible, dismissed |
 
@@ -118,13 +120,24 @@ Source: zinc palette inherited from Phase 1 (`IconRail.tsx`, `ConnectionDot.tsx`
 
 ---
 
+## Focal Points
+
+| Screen | Focal Point | Rationale |
+|--------|-------------|-----------|
+| Chat View (messages present) | Chat input area at the bottom of the viewport | The input is where the user spends most time composing commands. The blue "Send Message" button is the only accent-colored element in the viewport, drawing the eye. |
+| Chat View (empty) | Empty state heading + body text centered vertically | Guides the user to type their first command. |
+| Docs View (tabs open) | Markdown content area | The rendered document is the primary artifact the user is reviewing. Tab bar is secondary navigation. |
+| Docs View (empty) | Empty state heading + body text centered vertically | Explains how documents appear (via chat artifact links or agent activity). |
+
+---
+
 ## Interaction Contracts
 
 ### Chat Input Behavior
 
 | Trigger | Action | Visual Feedback |
 |---------|--------|-----------------|
-| User types text + presses Enter (or clicks Send) | `sendMessage()` called, input cleared | Input disabled, Send button shows spinner or disabled state |
+| User types text + presses Enter (or clicks Send Message) | `sendMessage()` called, input cleared | Input disabled, Send Message button shows spinner or disabled state |
 | User presses Shift+Enter | Newline inserted in input (no submit) | Input grows up to 4 lines max, then scrolls internally |
 | Stream starts (`status: 'submitted'`) | Activity indicator appears below message list | Pulsing blue dot + "Thinking..." text |
 | Stream chunks arrive (`status: 'streaming'`) | Assistant message text appends progressively | Indicator text changes to "Generating response...", message text grows |
@@ -154,7 +167,7 @@ Source: zinc palette inherited from Phase 1 (`IconRail.tsx`, `ConnectionDot.tsx`
 
 | Trigger | Action | Visual Feedback |
 |---------|--------|-----------------|
-| Chat message contains artifact filename (e.g. `spec.md`, `plan.md`) | Filename rendered as blue underlined link | `text-blue-600 hover:underline cursor-pointer font-medium` |
+| Chat message contains artifact filename (e.g. `spec.md`, `plan.md`) | Filename rendered as blue underlined link | `text-blue-600 hover:underline cursor-pointer font-semibold` |
 | User clicks artifact link | Switch `activeView` to `docs`, open tab for that file, set as active tab | View switches, tab appears in tab bar, document content loads |
 | File already open in a tab | Switch to existing tab (no duplicate) | Active tab highlight moves |
 
@@ -186,7 +199,7 @@ Source: zinc palette inherited from Phase 1 (`IconRail.tsx`, `ConnectionDot.tsx`
 
 | Element | Copy |
 |---------|------|
-| Primary CTA | "Send" (chat input submit button label) |
+| Primary CTA | "Send Message" (chat input submit button label) |
 | Chat empty state heading | "Start a conversation" |
 | Chat empty state body | "Type a command to invoke a workflow stage. Try asking to generate a spec or build a plan." |
 | Chat empty state (no feature) heading | "No feature selected" |
@@ -233,23 +246,23 @@ No destructive actions exist in Phase 2. Chat history is append-only (no delete)
 +----------------------------------------+
 |  [Error banner - conditional]          |
 +----------------------------------------+
-|  Chat input area (fixed, 56px min)     |
-|  [textarea]              [Send]        |
+|  Chat input area (fixed, 48px)         |
+|  [textarea]        [Send Message]      |
 +----------------------------------------+
 ```
 
 - Chat message area: `flex-1 overflow-y-auto px-4 py-8`
 - User messages: `ml-auto max-w-[80%] bg-blue-50 rounded-lg px-4 py-2`
 - Assistant messages: `mr-auto max-w-[80%] rounded-lg px-4 py-2`
-- Input area: `border-t border-zinc-200 bg-zinc-100 px-4 py-2 flex items-end gap-2`
-- Input field: `flex-1 resize-none bg-white border border-zinc-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`
-- Send button: `bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed`
+- Input area: `border-t border-zinc-200 bg-zinc-100 px-4 py-3 flex items-end gap-2 h-12`
+- Input field: `flex-1 resize-none bg-white border border-zinc-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`
+- Send Message button: `bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-1.5 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed`
 
 ### Docs View Layout
 
 ```
 +----------------------------------------+
-|  Tab bar (40px height, border-b)       |
+|  Tab bar (48px height, border-b)       |
 |  [spec.md] [plan.md] [tasks.md x]     |
 +----------------------------------------+
 |                                        |
@@ -260,9 +273,9 @@ No destructive actions exist in Phase 2. Chat history is append-only (no delete)
 +----------------------------------------+
 ```
 
-- Tab bar: `flex items-center gap-0 border-b border-zinc-200 bg-zinc-50 h-10 px-2 overflow-x-auto`
-- Tab item (active): `flex items-center gap-1 px-3 h-10 text-xs font-medium text-zinc-900 border-b-2 border-zinc-900 bg-white`
-- Tab item (inactive): `flex items-center gap-1 px-3 h-10 text-xs font-medium text-zinc-500 hover:text-zinc-700 hover:bg-zinc-100 cursor-pointer`
+- Tab bar: `flex items-center gap-0 border-b border-zinc-200 bg-zinc-50 h-12 px-2 overflow-x-auto`
+- Tab item (active): `flex items-center gap-1 px-3 h-12 text-xs font-semibold text-zinc-900 border-b-2 border-zinc-900 bg-white`
+- Tab item (inactive): `flex items-center gap-1 px-3 h-12 text-xs font-semibold text-zinc-500 hover:text-zinc-700 hover:bg-zinc-100 cursor-pointer`
 - Tab close button: `ml-1 text-zinc-400 hover:text-zinc-600 rounded p-0.5`
 - Markdown container: `flex-1 overflow-y-auto`
 - Markdown inner: `prose prose-sm prose-zinc max-w-none px-6 py-6`
