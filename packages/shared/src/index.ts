@@ -16,4 +16,11 @@ export type {
   ActivateFeatureConflict,
   DeactivateFeatureResponse,
   ApiError,
+  ChatMessagesListResponse,
+  SaveChatMessageRequest,
+  ChatMessageResponse,
+  ReadFileResponse,
 } from './types/api.js';
+
+// Editor types
+export type { EditorTab, ArtifactLink } from './types/editor.js';
