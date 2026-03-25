@@ -9,6 +9,7 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { common, createLowlight } from 'lowlight';
 import { useEffect, useRef, useCallback } from 'react';
 import { SearchExtension } from '../../lib/search-extension.js';
+import { DiffExtension } from '../../lib/diff-extension.js';
 
 const lowlight = createLowlight(common);
 
@@ -44,6 +45,7 @@ export function TipTapEditor({ content, editable, onUpdate, onEditorReady }: Tip
       Placeholder.configure({ placeholder: 'Empty document' }),
       CodeBlockLowlight.configure({ lowlight }),
       SearchExtension,
+      DiffExtension,
     ],
     content,
     contentType: 'markdown',

@@ -1,6 +1,16 @@
 import { Extension } from '@tiptap/core';
 import { search, SearchQuery, setSearchState } from 'prosemirror-search';
 
+// Declare custom commands on TipTap's Commands interface
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    search: {
+      setSearchQuery: (query: string) => ReturnType;
+      clearSearch: () => ReturnType;
+    };
+  }
+}
+
 export interface SearchExtensionStorage {
   searchVisible: boolean;
 }
