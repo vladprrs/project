@@ -22,6 +22,16 @@ interface AppStore {
   closeTab: (tabId: string) => void;
   setActiveTab: (tabId: string) => void;
   updateTabContent: (tabId: string, content: string) => void;
+
+  // Mode and dirty state (Phase 02.1 - edit mode toggle)
+  setTabMode: (tabId: string, mode: 'read' | 'edit') => void;
+  setTabDirty: (tabId: string, isDirty: boolean) => void;
+
+  // Snapshot support for diff view (used by Plan 04)
+  snapshotTabs: Map<string, string>;
+  captureSnapshot: () => void;
+  getSnapshot: (filePath: string) => string | undefined;
+  clearSnapshot: (filePath?: string) => void;
 }
 
 function getDisplayName(filePath: string): string {
@@ -102,15 +112,59 @@ export const useAppStore = create<AppStore>()(
         set((state) => ({
           tabs: state.tabs.map((t) =>
             t.id === tabId
-              ? { ...t, content, lastLoadedAt: Date.now() }
+              ? { ...t, content, lastLoadedAt: Date.now(), isDirty: false }
               : t
           ),
         }));
       },
+
+      // Mode toggle (Phase 02.1)
+      setTabMode: (tabId, mode) => {
+        set((state) => ({
+          tabs: state.tabs.map((t) =>
+            t.id === tabId ? { ...t, mode } : t
+          ),
+        }));
+      },
+
+      setTabDirty: (tabId, isDirty) => {
+        set((state) => ({
+          tabs: state.tabs.map((t) =>
+            t.id === tabId ? { ...t, isDirty } : t
+          ),
+        }));
+      },
+
+      // Snapshot support (Phase 02.1 - for diff view in Plan 04)
+      snapshotTabs: new Map(),
+
+      captureSnapshot: () => {
+        const state = get();
+        const snapshot = new Map<string, string>();
+        for (const tab of state.tabs) {
+          snapshot.set(tab.filePath, tab.content);
+        }
+        set({ snapshotTabs: snapshot });
+      },
+
+      getSnapshot: (filePath) => {
+        return get().snapshotTabs.get(filePath);
+      },
+
+      clearSnapshot: (filePath) => {
+        set((state) => {
+          if (filePath) {
+            const newMap = new Map(state.snapshotTabs);
+            newMap.delete(filePath);
+            return { snapshotTabs: newMap };
+          }
+          return { snapshotTabs: new Map() };
+        });
+      },
     }),
     {
       name: 'specflow-app',
-      // Per D-10: ONLY persist activeView. Tabs are ephemeral.
+      // Per D-10: ONLY persist activeView. Tabs and snapshots are ephemeral.
       partialize: (state) => ({ activeView: state.activeView }),
     }
   )
