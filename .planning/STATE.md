@@ -122,10 +122,11 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260324-qi4 | Close Phase 01 foundation gaps: configure Vitest, write tests T018 T025 T026 T033, implement T045 EADDRINUSE handling | 2026-03-24 | c625480 | [260324-qi4-close-phase-01-foundation-gaps-configure](./quick/260324-qi4-close-phase-01-foundation-gaps-configure/) |
+| 260325-jdi | Rewrite spec.md from test stub into complete 207-line feature specification with 17 requirements, 7 user stories, 6 NFRs | 2026-03-25 | 51fb2c4 | [260325-jdi-rewrite-spec-md-from-test-stub-into-real](./quick/260325-jdi-rewrite-spec-md-from-test-stub-into-real/) |
 
 ## Session Continuity
 
 Last activity: 2026-03-25
-Last session: 2026-03-25T08:46:19.218Z
-Stopped at: Completed 02.1-04-PLAN.md
+Last session: 2026-03-25T14:05:19Z
+Stopped at: Completed 260325-jdi (rewrite spec.md)
 Resume file: None
