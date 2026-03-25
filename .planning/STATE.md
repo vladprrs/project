@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Ready to execute
-stopped_at: Completed 02.1-03-PLAN.md
-last_updated: "2026-03-25T08:34:59.502Z"
+stopped_at: Completed 02.1-04-PLAN.md
+last_updated: "2026-03-25T08:46:19.222Z"
 last_activity: 2026-03-25
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 14
-  completed_plans: 12
+  completed_plans: 13
 ---
 
 # Project State
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-03-24)
 ## Current Position
 
 Phase: 02.1 (Editor Edit Mode + Diff View) — EXECUTING
-Plan: 4 of 5
+Plan: 5 of 5
 
 ## Performance Metrics
 
@@ -59,6 +59,7 @@ Plan: 4 of 5
 | Phase 02.1 P01 | 9min | 2 tasks | 8 files |
 | Phase 02.1 P02 | 4min | 2 tasks | 7 files |
 | Phase 02.1 P03 | 2min | 2 tasks | 5 files |
+| Phase 02.1 P04 | 6min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -99,6 +100,9 @@ Recent decisions affecting current work:
 - [Phase 02.1]: updateTabContent called after successful save to persist markdown AND reset isDirty atomically
 - [Phase 02.1]: Keyboard shortcuts registered via window.addEventListener (not TipTap) so Ctrl+S works regardless of editor focus
 - [Phase 02.1]: SearchBar positioned absolute within relative container wrapping TipTapEditor for clean overlay without layout shift
+- [Phase 02.1]: TipTap module augmentation (declare module @tiptap/core) for typed custom commands
+- [Phase 02.1]: textOffsetToPos helper for robust ProseMirror position mapping from text offsets
+- [Phase 02.1]: Diff decorations only for added hunks (removed shown as count in DiffOverlay banner)
 
 ### Roadmap Evolution
 
@@ -122,6 +126,6 @@ None yet.
 ## Session Continuity
 
 Last activity: 2026-03-25
-Last session: 2026-03-25T08:34:59.497Z
-Stopped at: Completed 02.1-03-PLAN.md
+Last session: 2026-03-25T08:46:19.218Z
+Stopped at: Completed 02.1-04-PLAN.md
 Resume file: None
