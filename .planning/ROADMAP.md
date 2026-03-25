@@ -52,8 +52,8 @@ Plans:
 
 Plans:
 - [x] 02-01-PLAN.md -- Shared types, backend ChatService, chat/files API routes, pagination index
-- [ ] 02-02-PLAN.md -- Frontend deps, Tailwind typography, Zustand editor tabs, useChatStream hook
-- [ ] 02-03-PLAN.md -- Chat UI: input, messages, artifact links, activity indicator, error banner
+- [x] 02-02-PLAN.md -- Frontend deps, Tailwind typography, Zustand editor tabs, useChatStream hook
+- [x] 02-03-PLAN.md -- Chat UI: input, messages, artifact links, activity indicator, error banner
 - [ ] 02-04-PLAN.md -- Document viewer: tab bar, markdown renderer, empty state, WebSocket live-reload
 - [ ] 02-05-PLAN.md -- Integration wiring: persistence, cross-panel navigation, full-stack verification
 **UI hint**: yes

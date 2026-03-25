@@ -9,15 +9,15 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Chat & Command Panel
 
-- [ ] **CHAT-01**: User can type natural language commands in chat panel to invoke spec-first workflow stages (specify, clarify, plan, tasks, implement, verify)
+- [x] **CHAT-01**: User can type natural language commands in chat panel to invoke spec-first workflow stages (specify, clarify, plan, tasks, implement, verify)
 - [x] **CHAT-02**: Chat uses Vercel AI SDK (useChat) with streaming responses from coding agents
 - [x] **CHAT-03**: Backend exposes /api/chat endpoint with custom AI SDK providers per agent (ai-sdk-provider-claude-code, ai-sdk-provider-codex-app-server, ai-sdk-provider-opencode-sdk)
 - [x] **CHAT-04**: Chat displays structured streaming output with stage transitions, progress messages, and result summaries — not raw CLI stdout
-- [ ] **CHAT-05**: Chat messages include clickable artifact references (spec.md, plan.md, tasks.md) that open the document in the editor panel
+- [x] **CHAT-05**: Chat messages include clickable artifact references (spec.md, plan.md, tasks.md) that open the document in the editor panel
 - [x] **CHAT-06**: Chat persists conversation history per feature in SQLite
 - [x] **CHAT-07**: Chat displays clear activity indicators during agent execution ("Generating spec...", "Building plan...")
 - [x] **CHAT-08**: Chat displays errors with actionable context (human-readable message + retry/edit action), not stack traces
-- [ ] **CHAT-09**: User can type feedback after rejection to re-invoke the current stage with updated context (rejection-feedback-retry loop)
+- [x] **CHAT-09**: User can type feedback after rejection to re-invoke the current stage with updated context (rejection-feedback-retry loop)
 
 ### Document Editor
 
@@ -106,15 +106,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CHAT-01 | Phase 2 | Pending |
+| CHAT-01 | Phase 2 | Complete |
 | CHAT-02 | Phase 2 | Complete |
 | CHAT-03 | Phase 2 | Complete |
 | CHAT-04 | Phase 2 | Complete |
-| CHAT-05 | Phase 2 | Pending |
+| CHAT-05 | Phase 2 | Complete |
 | CHAT-06 | Phase 2 | Complete |
 | CHAT-07 | Phase 2 | Complete |
 | CHAT-08 | Phase 2 | Complete |
-| CHAT-09 | Phase 2 | Pending |
+| CHAT-09 | Phase 2 | Complete |
 | EDIT-01 | Phase 2 | Pending |
 | EDIT-02 | Phase 2 | Complete |
 | EDIT-03 | Phase 2 | Complete |
