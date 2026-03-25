@@ -22,9 +22,10 @@ export function ChatMessage({ id, role, parts }: ChatMessageProps) {
     (filename: string) => {
       if (!activeFeature) return;
       // Resolve to full path if it's just a filename
+      const dir = activeFeature.directory.replace(/^\/+/, '');
       const fullPath = filename.startsWith('specs/')
         ? filename
-        : `specs/${activeFeature.directory}/${filename}`;
+        : `specs/${dir}/${filename}`;
 
       // Fetch file content and open tab
       fetch(`/api/files/read?path=${encodeURIComponent(fullPath)}`)

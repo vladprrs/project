@@ -31,12 +31,15 @@ export function ChatView() {
     const text = input.trim();
     if (!text || isProcessing) return;
 
+    // Clear input immediately
+    setInput('');
+
     // Persist user message
     persistMessage('user', text);
 
     // Send via AI SDK v6 -- sendMessage takes { text: string } for text protocol
     sendMessage({ text });
-  }, [input, isProcessing, sendMessage, persistMessage]);
+  }, [input, isProcessing, sendMessage, setInput, persistMessage]);
 
   const handleRetry = useCallback(() => {
     setErrorDismissed(false);

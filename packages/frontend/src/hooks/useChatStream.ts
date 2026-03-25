@@ -17,13 +17,15 @@ export function useChatStream() {
   }, [activeFeature]);
 
   // TextStreamChatTransport for text SSE protocol (per D-01/D-03)
+  // Use a function for body so featureId is resolved fresh on each request
+  // via the ref. This avoids stale closures when useChat caches the transport.
   const transport = useMemo(
     () =>
       new TextStreamChatTransport({
         api: '/api/chat',
-        body: { featureId: activeFeature?.id },
+        body: () => ({ featureId: activeFeatureRef.current?.id }),
       }),
-    [activeFeature?.id]
+    [] // singleton — body function reads from ref
   );
 
   const chat = useChat({
