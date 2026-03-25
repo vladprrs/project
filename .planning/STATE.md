@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Ready to execute
-stopped_at: Completed 02.1-02-PLAN.md
-last_updated: "2026-03-25T08:26:12.136Z"
+stopped_at: Completed 02.1-03-PLAN.md
+last_updated: "2026-03-25T08:34:59.502Z"
 last_activity: 2026-03-25
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 14
-  completed_plans: 11
+  completed_plans: 12
 ---
 
 # Project State
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-03-24)
 ## Current Position
 
 Phase: 02.1 (Editor Edit Mode + Diff View) — EXECUTING
-Plan: 3 of 5
+Plan: 4 of 5
 
 ## Performance Metrics
 
@@ -58,6 +58,7 @@ Plan: 3 of 5
 | Phase 02 P05 | 5min | 1 tasks | 2 files |
 | Phase 02.1 P01 | 9min | 2 tasks | 8 files |
 | Phase 02.1 P02 | 4min | 2 tasks | 7 files |
+| Phase 02.1 P03 | 2min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -95,6 +96,9 @@ Recent decisions affecting current work:
 - [Phase 02.1]: Backend-side recentlySaved Set with 500ms TTL for file watcher self-save suppression
 - [Phase 02.1]: User edits update content and isDirty atomically via useAppStore.setState (not updateTabContent which resets isDirty for live-reload)
 - [Phase 02.1]: TipTapEditor uses key={activeTab.id} to create fresh editor per tab (avoids stale ProseMirror state)
+- [Phase 02.1]: updateTabContent called after successful save to persist markdown AND reset isDirty atomically
+- [Phase 02.1]: Keyboard shortcuts registered via window.addEventListener (not TipTap) so Ctrl+S works regardless of editor focus
+- [Phase 02.1]: SearchBar positioned absolute within relative container wrapping TipTapEditor for clean overlay without layout shift
 
 ### Roadmap Evolution
 
@@ -118,6 +122,6 @@ None yet.
 ## Session Continuity
 
 Last activity: 2026-03-25
-Last session: 2026-03-25T08:26:12.132Z
-Stopped at: Completed 02.1-02-PLAN.md
+Last session: 2026-03-25T08:34:59.497Z
+Stopped at: Completed 02.1-03-PLAN.md
 Resume file: None
