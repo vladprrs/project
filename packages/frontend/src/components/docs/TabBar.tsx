@@ -1,6 +1,7 @@
 interface Tab {
   id: string;
   displayName: string;
+  isDirty?: boolean;
 }
 
 interface TabBarProps {
@@ -26,6 +27,9 @@ export function TabBar({ tabs, activeTabId, onTabClick, onTabClose }: TabBarProp
             onClick={() => onTabClick(tab.id)}
           >
             <span>{tab.displayName}</span>
+            {tab.isDirty && (
+              <span className="w-2 h-2 rounded-full bg-zinc-400 shrink-0" title="Unsaved changes" />
+            )}
             <button
               onClick={(e) => {
                 e.stopPropagation();

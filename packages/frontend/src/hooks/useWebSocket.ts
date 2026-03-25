@@ -44,7 +44,12 @@ export function useWebSocket() {
               // Update tab content if this file is open (EDIT-02: live-reload)
               const tab = store.tabs.find((t) => t.filePath === payload.path);
               if (tab) {
-                store.updateTabContent(tab.id, payload.content);
+                // Guard: do not overwrite dirty edits (conflict handled in Plan 05)
+                if (tab.mode === 'edit' && tab.isDirty) {
+                  console.log(`[ws] Skipping live-reload for dirty tab: ${payload.path}`);
+                } else {
+                  store.updateTabContent(tab.id, payload.content);
+                }
               }
             }
 
