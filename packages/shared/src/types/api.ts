@@ -56,3 +56,15 @@ export interface ReadFileResponse {
   path: string;
   content: string;
 }
+
+// POST /api/files/save request
+export interface SaveFileRequest {
+  filePath: string;
+  content: string;
+}
+
+// POST /api/files/save response
+export interface SaveFileResponse {
+  saved: boolean;
+  path: string;
+}

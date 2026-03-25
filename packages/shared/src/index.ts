@@ -23,4 +23,6 @@ export type {
   SaveChatMessageRequest,
   ChatMessageResponse,
   ReadFileResponse,
+  SaveFileRequest,
+  SaveFileResponse,
 } from './types/api.js';

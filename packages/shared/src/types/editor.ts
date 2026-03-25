@@ -4,6 +4,8 @@ export interface EditorTab {
   displayName: string; // e.g. "spec.md" or "contracts/api.md"
   content: string;
   lastLoadedAt: number; // Date.now() timestamp
+  mode: 'read' | 'edit';    // current editor mode
+  isDirty: boolean;          // unsaved changes flag
 }
 
 export interface ArtifactLink {

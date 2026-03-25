@@ -65,6 +65,8 @@ export const useAppStore = create<AppStore>()(
           displayName: getDisplayName(filePath),
           content,
           lastLoadedAt: Date.now(),
+          mode: 'read',    // default to read-only mode
+          isDirty: false,   // no unsaved changes on open
         };
         set({
           tabs: [...state.tabs, newTab],
