@@ -1,12 +1,13 @@
-import { Lock, Pencil } from 'lucide-react';
+import { Lock, Pencil, Save } from 'lucide-react';
 
 interface EditorToolbarProps {
   mode: 'read' | 'edit';
   isDirty: boolean;
   onToggleMode: () => void;
+  onSave: () => void;
 }
 
-export function EditorToolbar({ mode, isDirty, onToggleMode }: EditorToolbarProps) {
+export function EditorToolbar({ mode, isDirty, onToggleMode, onSave }: EditorToolbarProps) {
   return (
     <div className="flex items-center gap-2 px-3 h-10 border-b border-zinc-200 bg-zinc-50 text-xs shrink-0">
       <button
@@ -30,8 +31,20 @@ export function EditorToolbar({ mode, isDirty, onToggleMode }: EditorToolbarProp
           </>
         )}
       </button>
-      {isDirty && (
-        <span className="text-zinc-400 italic">Unsaved</span>
+      {mode === 'edit' && (
+        <button
+          onClick={onSave}
+          disabled={!isDirty}
+          className={`flex items-center gap-1.5 px-2 py-1 rounded transition-colors ${
+            isDirty
+              ? 'text-blue-600 hover:text-blue-800 hover:bg-blue-50 cursor-pointer'
+              : 'text-zinc-400 cursor-default'
+          }`}
+          title={isDirty ? 'Save document (Ctrl+S)' : 'No unsaved changes'}
+        >
+          <Save size={14} />
+          <span>{isDirty ? 'Save' : 'Saved'}</span>
+        </button>
       )}
     </div>
   );
