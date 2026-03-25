@@ -9,7 +9,7 @@ export { PIPELINE_STAGES, TRANSITION_DIRECTIONS, TASK_STATUSES, CHAT_ROLES } fro
 export type { PipelineStage, TransitionDirection, TaskStatus, ChatRole } from './types/feature.js';
 
 // Editor types
-export type { EditorTab } from './types/editor.js';
+export type { EditorTab, ArtifactLink } from './types/editor.js';
 
 // API contract types
 export type {
@@ -24,6 +24,3 @@ export type {
   ChatMessageResponse,
   ReadFileResponse,
 } from './types/api.js';
-
-// Editor types
-export type { EditorTab, ArtifactLink } from './types/editor.js';
