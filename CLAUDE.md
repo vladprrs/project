@@ -188,3 +188,10 @@ Do not make direct repo edits outside a GSD workflow unless the user explicitly 
 > Profile not yet configured. Run `/gsd:profile-user` to generate your developer profile.
 > This section is managed by `generate-claude-profile` -- do not edit manually.
 <!-- GSD:profile-end -->
+
+## Active Technologies
+- TypeScript 5.x, Node.js 20+ (LTS) + Express 4.x (backend HTTP), ws 8.x (WebSocket), React 19 (frontend), Vite 6.x (bundler), chokidar 4.x (file watching), better-sqlite3 (SQLite driver), drizzle-orm (type-safe queries), Tailwind CSS (styling) (001-foundation)
+- SQLite via better-sqlite3 + drizzle-orm for IDE state; filesystem for spec artifacts (`specs/`) (001-foundation)
+
+## Recent Changes
+- 001-foundation: Added TypeScript 5.x, Node.js 20+ (LTS) + Express 4.x (backend HTTP), ws 8.x (WebSocket), React 19 (frontend), Vite 6.x (bundler), chokidar 4.x (file watching), better-sqlite3 (SQLite driver), drizzle-orm (type-safe queries), Tailwind CSS (styling)
