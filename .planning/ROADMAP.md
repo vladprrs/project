@@ -54,7 +54,7 @@ Plans:
 - [x] 02-01-PLAN.md -- Shared types, backend ChatService, chat/files API routes, pagination index
 - [x] 02-02-PLAN.md -- Frontend deps, Tailwind typography, Zustand editor tabs, useChatStream hook
 - [x] 02-03-PLAN.md -- Chat UI: input, messages, artifact links, activity indicator, error banner
-- [ ] 02-04-PLAN.md -- Document viewer: tab bar, markdown renderer, empty state, WebSocket live-reload
+- [x] 02-04-PLAN.md -- Document viewer: tab bar, markdown renderer, empty state, WebSocket live-reload
 - [ ] 02-05-PLAN.md -- Integration wiring: persistence, cross-panel navigation, full-stack verification
 **UI hint**: yes
 
@@ -94,6 +94,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete | 2026-03-24 |
-| 2. Chat + Document Editor | 0/5 | Planned | - |
+| 2. Chat + Document Editor | 4/5 | In Progress|  |
 | 3. Pipeline + Kanban | 0/0 | Not started | - |
 | 4. Integration + Polish | 0/0 | Not started | - |

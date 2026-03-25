@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Ready to execute
-stopped_at: Completed 02-03-PLAN.md
-last_updated: "2026-03-25T04:51:52.064Z"
+status: Phase complete — ready for verification
+stopped_at: "Completed 02-05 Task 1; awaiting checkpoint:human-verify for Task 2"
+last_updated: "2026-03-25T05:03:44.144Z"
 last_activity: 2026-03-25
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 9
-  completed_plans: 7
+  completed_plans: 8
 ---
 
 # Project State
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-03-24)
 ## Current Position
 
 Phase: 02 (chat-document-editor) — EXECUTING
-Plan: 4 of 5 (Wave 1 complete)
+Plan: 5 of 5 (Wave 1 complete)
 
 ## Performance Metrics
 
@@ -54,6 +54,8 @@ Plan: 4 of 5 (Wave 1 complete)
 | Phase 02 P01 | 3 min | 2 tasks | 8 files |
 | Phase 02 P02 | 5min | 2 tasks | 6 files |
 | Phase 02 P03 | 2min | 2 tasks | 6 files |
+| Phase 02 P04 | 3min | 2 tasks | 6 files |
+| Phase 02 P05 | 5min | 1 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -82,6 +84,11 @@ Recent decisions affecting current work:
 - [Phase 02]: EditorTab type created in shared package (missing from Phase 1)
 - [Phase 02]: Pagination UI deferred -- backend cursor support exists but frontend wiring avoids dead code
 - [Phase 02]: Artifact link detection uses ARTIFACT_PATTERN regex matching known spec filenames in chat messages
+- [Phase 02]: Read-only viewer using react-markdown (not TipTap) since D-04 specifies no edit mode toggle
+- [Phase 02]: Scroll preservation via dual useLayoutEffect (capture before re-render, restore after content update)
+- [Phase 02]: Auto-open from filesystem:created captures previousActiveTabId BEFORE openTab to prevent focus steal
+- [Phase 02]: AI SDK v6 sendMessage uses { text } not { content }; onFinish destructures { message } from options
+- [Phase 02]: useRef pattern for stale closure prevention in async callbacks (activeFeatureRef)
 
 ### Pending Todos
 
@@ -101,6 +108,6 @@ None yet.
 ## Session Continuity
 
 Last activity: 2026-03-25
-Last session: 2026-03-25T04:51:52.060Z
-Stopped at: Completed 02-03-PLAN.md
+Last session: 2026-03-25T05:03:44.140Z
+Stopped at: Completed 02-05 Task 1; awaiting checkpoint:human-verify for Task 2
 Resume file: None

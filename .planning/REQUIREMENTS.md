@@ -21,10 +21,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Document Editor
 
-- [ ] **EDIT-01**: User can view spec.md, plan.md, and tasks.md rendered in TipTap with markdown support (headings, lists, code blocks, tables, checkboxes)
+- [x] **EDIT-01**: User can view spec.md, plan.md, and tasks.md rendered in TipTap with markdown support (headings, lists, code blocks, tables, checkboxes)
 - [x] **EDIT-02**: Document editor live-reloads when artifact files change on disk via backend filesystem watch + WebSocket push
 - [x] **EDIT-03**: Editor supports multiple document tabs with tab bar navigation
-- [ ] **EDIT-04**: Editor tabs open automatically when a new artifact is created by an agent command
+- [x] **EDIT-04**: Editor tabs open automatically when a new artifact is created by an agent command
 - [x] **EDIT-05**: Editor has read-only mode by default for generated artifacts, with explicit toggle to edit mode
 - [ ] **EDIT-06**: Editor supports basic in-document search (Cmd+F)
 - [ ] **EDIT-07**: Editor supports undo/redo within edit sessions
@@ -115,10 +115,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CHAT-07 | Phase 2 | Complete |
 | CHAT-08 | Phase 2 | Complete |
 | CHAT-09 | Phase 2 | Complete |
-| EDIT-01 | Phase 2 | Pending |
+| EDIT-01 | Phase 2 | Complete |
 | EDIT-02 | Phase 2 | Complete |
 | EDIT-03 | Phase 2 | Complete |
-| EDIT-04 | Phase 2 | Pending |
+| EDIT-04 | Phase 2 | Complete |
 | EDIT-05 | Phase 2 | Complete |
 | EDIT-06 | Phase 2 | Pending |
 | EDIT-07 | Phase 2 | Pending |
