@@ -36,8 +36,44 @@ export function useWebSocket() {
           if (message.channel === 'snapshot') {
             setActiveFeature(message.payload.activeFeature);
             console.log('[ws] Snapshot received:', message.payload.activeFeature?.name ?? 'no active feature');
-          } else {
-            console.log('[ws] Received:', message.channel, message.payload.type, (message.payload as any).path);
+          } else if (message.channel === 'filesystem') {
+            const payload = message.payload;
+            const store = useAppStore.getState();
+
+            if (payload.type === 'changed' && 'content' in payload) {
+              // Update tab content if this file is open (EDIT-02: live-reload)
+              const tab = store.tabs.find((t) => t.filePath === payload.path);
+              if (tab) {
+                store.updateTabContent(tab.id, payload.content);
+              }
+            }
+
+            if (payload.type === 'created' && 'content' in payload) {
+              // Auto-open tab for new artifact in active feature directory (EDIT-04)
+              const feature = store.activeFeature;
+              if (feature && payload.path.startsWith(`specs/${feature.directory}/`)) {
+                // CRITICAL: Capture the current activeTabId BEFORE calling openTab,
+                // because openTab mutates activeTabId to the new tab.
+                // For auto-opened tabs (filesystem:created), we do NOT want to steal
+                // focus from the tab the user is currently viewing.
+                const previousActiveTabId = store.activeTabId;
+                store.openTab(payload.path, payload.content);
+                // Restore previous active tab if one was already active
+                if (previousActiveTabId && store.tabs.find((t) => t.id === previousActiveTabId)) {
+                  store.setActiveTab(previousActiveTabId);
+                }
+              }
+            }
+
+            if (payload.type === 'deleted') {
+              // Close tab if file was deleted (UI-SPEC: tab removed, adjacent tab activated)
+              const tab = store.tabs.find((t) => t.filePath === payload.path);
+              if (tab) {
+                store.closeTab(tab.id);
+              }
+            }
+
+            console.log('[ws] Filesystem:', payload.type, payload.path);
           }
         } catch (err) {
           console.error('[ws] Failed to parse message:', err);
