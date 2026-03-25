@@ -67,6 +67,9 @@ export function createDb() {
       metadata TEXT,
       created_at TEXT NOT NULL
     );
+
+    CREATE INDEX IF NOT EXISTS idx_chat_messages_feature_cursor
+      ON chat_messages(feature_id, created_at DESC, id DESC);
   `);
 
   return db;

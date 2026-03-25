@@ -1,1 +1,15 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Search match highlights (prosemirror-search) */
+.ProseMirror-search-match {
+  background-color: rgba(250, 204, 21, 0.4);
+  border-radius: 2px;
+}
+
+/* Diff overlay decorations (Plan 04) */
+.diff-added {
+  background-color: rgba(34, 197, 94, 0.15);
+  border-left: 3px solid rgba(34, 197, 94, 0.6);
+  padding-left: 8px;
+}

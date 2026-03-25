@@ -13,7 +13,7 @@ SpecFlow IDE delivers a web-based document-centric interface for spec-first AI d
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Foundation** - ESM monorepo, Express+WebSocket server, file watcher, SQLite schema, shared types, nav shell
-- [ ] **Phase 2: Chat + Document Editor** - AI SDK chat with streaming agent responses, TipTap markdown editor with live reload and tabs
+- [ ] **Phase 2: Chat + Document Editor** - AI SDK chat with streaming agent responses, read-only markdown viewer with live reload and tabs
 - [ ] **Phase 3: Pipeline + Kanban** - Workflow stage bar with approval gates, kanban board parsed from tasks.md with real-time updates
 - [ ] **Phase 4: Integration + Polish** - WebSocket reconnection with reconciliation, cross-panel hardening, MVP packaging
 
@@ -39,19 +39,46 @@ Plans:
 **UI hint**: yes
 
 ### Phase 2: Chat + Document Editor
-**Goal**: Users can type commands in the chat panel to invoke coding agents via AI SDK, see structured streaming responses, and view the resulting spec artifacts rendered in a tabbed TipTap editor that live-reloads on file changes
+**Goal**: Users can type commands in the chat panel to invoke coding agents via AI SDK, see structured streaming responses, and view the resulting spec artifacts rendered in a tabbed read-only markdown viewer that live-reloads on file changes
 **Depends on**: Phase 1
 **Requirements**: CHAT-01, CHAT-02, CHAT-03, CHAT-04, CHAT-05, CHAT-06, CHAT-07, CHAT-08, CHAT-09, EDIT-01, EDIT-02, EDIT-03, EDIT-04, EDIT-05, EDIT-06, EDIT-07, EDIT-08
 **Success Criteria** (what must be TRUE):
   1. User types a natural language command in the chat panel and sees a streaming response from an AI SDK provider with activity indicators and structured output (not raw stdout)
   2. Chat messages containing artifact references (spec.md, plan.md) render as clickable links that switch to the Docs view and open that artifact in a new editor tab
-  3. TipTap editor renders markdown documents with headings, lists, code blocks, tables, and checkboxes -- and the document live-reloads when the underlying file changes on disk
-  4. Editor opens in read-only mode by default with an explicit toggle to enable editing, and supports undo/redo plus in-document search (Cmd+F) when in edit mode
-  5. After a rejection (user provides feedback in chat), the editor shows inline diff markers highlighting what changed in the revised artifact
-**Plans**: TBD
+  3. Read-only markdown viewer renders documents with headings, lists, code blocks, tables, and checkboxes -- and the document live-reloads when the underlying file changes on disk
+  4. Editor is read-only by default (editing, undo/redo, search deferred per D-04/D-05 to a future phase with validated markdown round-trips)
+  5. After a rejection (user provides feedback in chat), the retry loop re-invokes the agent (diff view deferred per D-04/D-05)
+**Plans**: 5 plans
 
 Plans:
-- [ ] 02-01: TBD
+- [x] 02-01-PLAN.md -- Shared types, backend ChatService, chat/files API routes, pagination index
+- [x] 02-02-PLAN.md -- Frontend deps, Tailwind typography, Zustand editor tabs, useChatStream hook
+- [x] 02-03-PLAN.md -- Chat UI: input, messages, artifact links, activity indicator, error banner
+- [x] 02-04-PLAN.md -- Document viewer: tab bar, markdown renderer, empty state, WebSocket live-reload
+- [ ] 02-05-PLAN.md -- Integration wiring: persistence, cross-panel navigation, full-stack verification
+**UI hint**: yes
+
+### Phase 02.1: Editor Edit Mode + Diff View -- TipTap migration, edit/save/search, inline diff markers for rejection feedback (INSERTED)
+
+**Goal:** Replace the react-markdown read-only viewer with TipTap 3, add edit mode with save/undo-redo/search, implement inline diff overlay for rejection feedback, and add edit-mode safeguards (conflict warning, unsaved changes prompt)
+**Requirements**: EDIT-05, EDIT-06, EDIT-07, EDIT-08
+**Depends on:** Phase 2
+**Success Criteria** (what must be TRUE):
+  1. TipTap editor renders markdown documents with full fidelity (headings, lists, code blocks, tables, checkboxes) -- matching react-markdown output quality
+  2. Editor defaults to read-only mode with a visible toggle to switch to edit mode
+  3. In edit mode, user can type changes, undo/redo works, and Ctrl+S saves the document to disk via POST /api/files/save
+  4. Cmd+F opens in-document search with match highlighting and next/prev navigation
+  5. After submitting chat feedback and an agent revises an artifact, the editor shows inline green diff markers on changed text with a dismissable banner
+  6. Conflict warning appears when user has unsaved edits and the file changes on disk
+  7. Unsaved changes prompt appears when toggling from edit to read-only mode with dirty content
+**Plans**: 5 plans
+
+Plans:
+- [x] 02.1-01-PLAN.md -- Dependencies, shared types, backend POST /api/files/save with watcher suppression
+- [x] 02.1-02-PLAN.md -- TipTapEditor component, Zustand store extensions, EditorToolbar, DocsView rewrite
+- [x] 02.1-03-PLAN.md -- Save functionality (Ctrl+S) and in-document search (Cmd+F)
+- [x] 02.1-04-PLAN.md -- Diff view: diff-compute, DiffOverlay, snapshot capture, filesystem wiring
+- [x] 02.1-05-PLAN.md -- Edit-mode safeguards, tab bar overflow, live-reload search, end-to-end verification
 **UI hint**: yes
 
 ### Phase 3: Pipeline + Kanban
@@ -85,11 +112,12 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4
+Phases execute in numeric order: 1 -> 2 -> 2.1 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 3/4 | Gap closure planned | - |
-| 2. Chat + Document Editor | 0/0 | Not started | - |
+| 1. Foundation | 4/4 | Complete | 2026-03-24 |
+| 2. Chat + Document Editor | 4/5 | In Progress|  |
+| 2.1 Editor Edit Mode + Diff View | 0/5 | Not started | - |
 | 3. Pipeline + Kanban | 0/0 | Not started | - |
 | 4. Integration + Polish | 0/0 | Not started | - |

@@ -12,7 +12,12 @@ The IDE maps human decisions (approve, reject, refine) to concrete CLI tool invo
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Chat streams structured responses via AI SDK streaming protocol — Validated in Phase 02: Chat Document Editor
+- [x] Chat messages include clickable links to created/updated artifacts that open in the doc editor — Validated in Phase 02
+- [x] Document editor renders spec.md, plan.md, and tasks.md with markdown support (headings, lists, code blocks, tables) — Validated in Phase 02
+- [x] Document editor live-reloads when artifact files change on disk (filesystem watch via backend WebSocket push) — Validated in Phase 02
+- [x] Document editor tabs open automatically when a new artifact is created — Validated in Phase 02
+- [x] Backend serves AI SDK-compatible streaming endpoints (/api/chat) — Validated in Phase 02 (placeholder agent; real providers Phase 3+)
 
 ### Active
 
@@ -109,4 +114,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-24 — Phase 1 (Foundation) complete: ESM monorepo, Express backend with WebSocket + SQLite + file watcher, React frontend with icon rail + view persistence*
+*Last updated: 2026-03-25 — Phase 2 (Chat + Document Editor) complete: SSE chat with AI SDK streaming, artifact link navigation, tabbed markdown viewer with GFM rendering and live-reload*

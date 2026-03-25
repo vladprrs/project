@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useAppStore } from '../store/index.js';
 import type { MessageEnvelope } from '@specflow/shared';
+import { computeDiff, hasDiffChanges } from '../lib/diff-compute.js';
 
 const MAX_RETRIES = 10;
 const BASE_DELAY = 1000;
@@ -36,8 +37,62 @@ export function useWebSocket() {
           if (message.channel === 'snapshot') {
             setActiveFeature(message.payload.activeFeature);
             console.log('[ws] Snapshot received:', message.payload.activeFeature?.name ?? 'no active feature');
-          } else {
-            console.log('[ws] Received:', message.channel, message.payload.type, (message.payload as any).path);
+          } else if (message.channel === 'filesystem') {
+            const payload = message.payload;
+            const store = useAppStore.getState();
+
+            if (payload.type === 'changed' && 'content' in payload) {
+              // Update tab content if this file is open (EDIT-02: live-reload)
+              const tab = store.tabs.find((t) => t.filePath === payload.path);
+              if (tab) {
+                // Guard: do not overwrite dirty edits -- signal conflict instead
+                if (tab.mode === 'edit' && tab.isDirty) {
+                  store.setConflict(payload.path, payload.content);
+                  console.log(`[ws] Conflict: dirty tab ${payload.path} changed on disk`);
+                  // Don't update tab content -- let the user choose via conflict banner
+                } else {
+                  // Diff trigger: compare snapshot (if exists) with new content
+                  const snapshot = store.getSnapshot(payload.path);
+                  if (snapshot !== undefined) {
+                    const hunks = computeDiff(snapshot, payload.content);
+                    if (hasDiffChanges(hunks)) {
+                      store.setDiffData(payload.path, hunks);
+                      console.log(`[ws] Diff computed for ${payload.path}: ${hunks.filter(h => h.type !== 'unchanged').length} changes`);
+                    }
+                    store.clearSnapshot(payload.path);
+                  }
+
+                  store.updateTabContent(tab.id, payload.content);
+                }
+              }
+            }
+
+            if (payload.type === 'created' && 'content' in payload) {
+              // Auto-open tab for new artifact in active feature directory (EDIT-04)
+              const feature = store.activeFeature;
+              if (feature && payload.path.startsWith(`specs/${feature.directory}/`)) {
+                // CRITICAL: Capture the current activeTabId BEFORE calling openTab,
+                // because openTab mutates activeTabId to the new tab.
+                // For auto-opened tabs (filesystem:created), we do NOT want to steal
+                // focus from the tab the user is currently viewing.
+                const previousActiveTabId = store.activeTabId;
+                store.openTab(payload.path, payload.content);
+                // Restore previous active tab if one was already active
+                if (previousActiveTabId && store.tabs.find((t) => t.id === previousActiveTabId)) {
+                  store.setActiveTab(previousActiveTabId);
+                }
+              }
+            }
+
+            if (payload.type === 'deleted') {
+              // Close tab if file was deleted (UI-SPEC: tab removed, adjacent tab activated)
+              const tab = store.tabs.find((t) => t.filePath === payload.path);
+              if (tab) {
+                store.closeTab(tab.id);
+              }
+            }
+
+            console.log('[ws] Filesystem:', payload.type, payload.path);
           }
         } catch (err) {
           console.error('[ws] Failed to parse message:', err);

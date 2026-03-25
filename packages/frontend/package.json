@@ -9,16 +9,31 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@ai-sdk/react": "^3.0.140",
+    "@tailwindcss/typography": "^0.5.19",
+    "@tiptap/extension-code-block-lowlight": "^3.20.5",
+    "@tiptap/extension-placeholder": "^3.20.5",
+    "@tiptap/extension-task-item": "^3.20.5",
+    "@tiptap/extension-task-list": "^3.20.5",
+    "@tiptap/markdown": "^3.20.5",
+    "@tiptap/pm": "^3.20.5",
+    "@tiptap/react": "^3.20.5",
+    "@tiptap/starter-kit": "^3.20.5",
+    "@types/diff": "^8.0.0",
+    "ai": "^6.0.138",
+    "diff": "^8.0.4",
+    "lowlight": "^3.3.0",
+    "lucide-react": "^1.0.1",
+    "prosemirror-search": "^1.1.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "zustand": "^5.0.12",
-    "lucide-react": "^1.0.1"
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^6.0.1",
-    "tailwindcss": "^4.2.2",
     "@tailwindcss/vite": "^4.2.2",
     "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0"
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "tailwindcss": "^4.2.2"
   }
 }

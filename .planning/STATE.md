@@ -2,14 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase 1 shipped — PR #48
-stopped_at: Completed 260324-qi4 (close phase 01 gaps)
-last_updated: "2026-03-24T19:13:15Z"
+status: Ready to plan
+stopped_at: "Phase 02.1 shipped — PR #136"
+last_updated: "2026-03-25T15:47:20.707Z"
+last_activity: 2026-03-25
 progress:
-  total_phases: 4
-  completed_phases: 1
-  total_plans: 4
-  completed_plans: 4
+  total_phases: 5
+  completed_phases: 3
+  total_plans: 14
+  completed_plans: 14
 ---
 
 # Project State
@@ -19,11 +20,11 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** The IDE maps human decisions (approve, reject, refine) to automated spec-first AI execution, making the workflow accessible without memorizing CLI commands.
-**Current focus:** Phase 01 — foundation
+**Current focus:** Phase 02.1 — editor-edit-mode-diff-view-tiptap-migration-edit-save-search-inline-diff-markers-for-rejection-feedback
 
 ## Current Position
 
-Phase: 2
+Phase: 3
 Plan: Not started
 
 ## Performance Metrics
@@ -50,6 +51,16 @@ Plan: Not started
 | Phase 01 P02 | 3 min | 2 tasks | 8 files |
 | Phase 01 P04 | 2min | 2 tasks | 8 files |
 | Phase 01 qi4 | 4 min | 3 tasks | 11 files |
+| Phase 02 P01 | 3 min | 2 tasks | 8 files |
+| Phase 02 P02 | 5min | 2 tasks | 6 files |
+| Phase 02 P03 | 2min | 2 tasks | 6 files |
+| Phase 02 P04 | 3min | 2 tasks | 6 files |
+| Phase 02 P05 | 5min | 1 tasks | 2 files |
+| Phase 02.1 P01 | 9min | 2 tasks | 8 files |
+| Phase 02.1 P02 | 4min | 2 tasks | 7 files |
+| Phase 02.1 P03 | 2min | 2 tasks | 5 files |
+| Phase 02.1 P04 | 6min | 2 tasks | 10 files |
+| Phase 02.1 P05 | 5min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -70,6 +81,35 @@ Recent decisions affecting current work:
 - [Phase 01]: activeFeature not persisted to localStorage -- always derived from server snapshot on connect
 - [Phase 01 qi4]: Vitest 4 uses test.projects (not workspace) -- plan referenced older API
 - [Phase 01 qi4]: Real dependencies over mocks for integration tests (chokidar, ws, SQLite in-memory)
+- [Phase 02]: Composite cursor format (createdAt|id) for stable cursor pagination
+- [Phase 02]: text/plain SSE streaming (not text/event-stream) for AI SDK useChat text protocol compatibility
+- [Phase 02]: Placeholder echo agent in POST /api/chat -- real AI SDK provider integration deferred to Phase 3+
+- [Phase 02]: AI SDK v6 uses TextStreamChatTransport instead of direct api/streamProtocol on useChat
+- [Phase 02]: useChat v6 input state managed locally via useState (not exposed by hook)
+- [Phase 02]: EditorTab type created in shared package (missing from Phase 1)
+- [Phase 02]: Pagination UI deferred -- backend cursor support exists but frontend wiring avoids dead code
+- [Phase 02]: Artifact link detection uses ARTIFACT_PATTERN regex matching known spec filenames in chat messages
+- [Phase 02]: Read-only viewer using react-markdown (not TipTap) since D-04 specifies no edit mode toggle
+- [Phase 02]: Scroll preservation via dual useLayoutEffect (capture before re-render, restore after content update)
+- [Phase 02]: Auto-open from filesystem:created captures previousActiveTabId BEFORE openTab to prevent focus steal
+- [Phase 02]: AI SDK v6 sendMessage uses { text } not { content }; onFinish destructures { message } from options
+- [Phase 02]: useRef pattern for stale closure prevention in async callbacks (activeFeatureRef)
+- [Phase 02.1]: TipTap 3.20.5 installed directly (no v2 migration cost since no v2 code exists)
+- [Phase 02.1]: Backend-side recentlySaved Set with 500ms TTL for file watcher self-save suppression
+- [Phase 02.1]: User edits update content and isDirty atomically via useAppStore.setState (not updateTabContent which resets isDirty for live-reload)
+- [Phase 02.1]: TipTapEditor uses key={activeTab.id} to create fresh editor per tab (avoids stale ProseMirror state)
+- [Phase 02.1]: updateTabContent called after successful save to persist markdown AND reset isDirty atomically
+- [Phase 02.1]: Keyboard shortcuts registered via window.addEventListener (not TipTap) so Ctrl+S works regardless of editor focus
+- [Phase 02.1]: SearchBar positioned absolute within relative container wrapping TipTapEditor for clean overlay without layout shift
+- [Phase 02.1]: TipTap module augmentation (declare module @tiptap/core) for typed custom commands
+- [Phase 02.1]: textOffsetToPos helper for robust ProseMirror position mapping from text offsets
+- [Phase 02.1]: Diff decorations only for added hunks (removed shown as count in DiffOverlay banner)
+- [Phase 02.1]: Conflict state (conflictFilePath/conflictContent) in Zustand for cross-component conflict detection between useWebSocket and DocsView
+- [Phase 02.1]: SearchBar converted to controlled component (query from parent DocsView) to enable live-reload search refresh
+
+### Roadmap Evolution
+
+- Phase 02.1 inserted after Phase 02: Editor Edit Mode + Diff View — TipTap migration, edit/save/search, inline diff markers for rejection feedback (URGENT)
 
 ### Pending Todos
 
@@ -85,10 +125,12 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260324-qi4 | Close Phase 01 foundation gaps: configure Vitest, write tests T018 T025 T026 T033, implement T045 EADDRINUSE handling | 2026-03-24 | c625480 | [260324-qi4-close-phase-01-foundation-gaps-configure](./quick/260324-qi4-close-phase-01-foundation-gaps-configure/) |
+| 260325-jdi | Rewrite spec.md from test stub into complete 207-line feature specification with 17 requirements, 7 user stories, 6 NFRs | 2026-03-25 | 51fb2c4 | [260325-jdi-rewrite-spec-md-from-test-stub-into-real](./quick/260325-jdi-rewrite-spec-md-from-test-stub-into-real/) |
+| 260325-jyv | Close 23 completed GitHub issues to sync with tasks.md statuses | 2026-03-25 | 5cab924 | [260325-jyv-check-github-issues-and-update-task-stat](./quick/260325-jyv-check-github-issues-and-update-task-stat/) |
 
 ## Session Continuity
 
-Last activity: 2026-03-25 - Shipped Phase 1 Foundation — PR #48
-Last session: 2026-03-24T19:15:00Z
-Stopped at: Completed 260324-qi4 (close phase 01 gaps)
+Last activity: 2026-03-25
+Last session: 2026-03-25T15:47:20.703Z
+Stopped at: Phase 02.1 shipped — PR #136
 Resume file: None

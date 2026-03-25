@@ -8,6 +8,9 @@ export type { Feature, PipelineState, TransitionHistory, TaskCardCache, ChatMess
 export { PIPELINE_STAGES, TRANSITION_DIRECTIONS, TASK_STATUSES, CHAT_ROLES } from './types/feature.js';
 export type { PipelineStage, TransitionDirection, TaskStatus, ChatRole } from './types/feature.js';
 
+// Editor types
+export type { EditorTab, ArtifactLink } from './types/editor.js';
+
 // API contract types
 export type {
   GetActiveFeatureResponse,
@@ -16,4 +19,10 @@ export type {
   ActivateFeatureConflict,
   DeactivateFeatureResponse,
   ApiError,
+  ChatMessagesListResponse,
+  SaveChatMessageRequest,
+  ChatMessageResponse,
+  ReadFileResponse,
+  SaveFileRequest,
+  SaveFileResponse,
 } from './types/api.js';
