@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Ready to execute
-stopped_at: Completed 02.1-04-PLAN.md
-last_updated: "2026-03-25T08:46:19.222Z"
+stopped_at: Completed 02.1-05-PLAN.md (Phase 02.1 complete)
+last_updated: "2026-03-25T15:31:38.198Z"
 last_activity: 2026-03-25
 progress:
   total_phases: 5
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 14
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 # Project State
@@ -20,12 +20,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** The IDE maps human decisions (approve, reject, refine) to automated spec-first AI execution, making the workflow accessible without memorizing CLI commands.
-**Current focus:** Phase 02.1 — Editor Edit Mode + Diff View
+**Current focus:** Phase 02.1 — editor-edit-mode-diff-view-tiptap-migration-edit-save-search-inline-diff-markers-for-rejection-feedback
 
 ## Current Position
 
-Phase: 02.1 (Editor Edit Mode + Diff View) — EXECUTING
-Plan: 5 of 5
+Phase: 02.1 (editor-edit-mode-diff-view-tiptap-migration-edit-save-search-inline-diff-markers-for-rejection-feedback) — EXECUTING
+Plan: 2 of 5
 
 ## Performance Metrics
 
@@ -60,6 +60,7 @@ Plan: 5 of 5
 | Phase 02.1 P02 | 4min | 2 tasks | 7 files |
 | Phase 02.1 P03 | 2min | 2 tasks | 5 files |
 | Phase 02.1 P04 | 6min | 2 tasks | 10 files |
+| Phase 02.1 P05 | 5min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -103,6 +104,8 @@ Recent decisions affecting current work:
 - [Phase 02.1]: TipTap module augmentation (declare module @tiptap/core) for typed custom commands
 - [Phase 02.1]: textOffsetToPos helper for robust ProseMirror position mapping from text offsets
 - [Phase 02.1]: Diff decorations only for added hunks (removed shown as count in DiffOverlay banner)
+- [Phase 02.1]: Conflict state (conflictFilePath/conflictContent) in Zustand for cross-component conflict detection between useWebSocket and DocsView
+- [Phase 02.1]: SearchBar converted to controlled component (query from parent DocsView) to enable live-reload search refresh
 
 ### Roadmap Evolution
 
@@ -123,11 +126,11 @@ None yet.
 |---|-------------|------|--------|-----------|
 | 260324-qi4 | Close Phase 01 foundation gaps: configure Vitest, write tests T018 T025 T026 T033, implement T045 EADDRINUSE handling | 2026-03-24 | c625480 | [260324-qi4-close-phase-01-foundation-gaps-configure](./quick/260324-qi4-close-phase-01-foundation-gaps-configure/) |
 | 260325-jdi | Rewrite spec.md from test stub into complete 207-line feature specification with 17 requirements, 7 user stories, 6 NFRs | 2026-03-25 | 51fb2c4 | [260325-jdi-rewrite-spec-md-from-test-stub-into-real](./quick/260325-jdi-rewrite-spec-md-from-test-stub-into-real/) |
-| 260325-jyv | Close 23 completed GitHub issues to sync with tasks.md statuses | 2026-03-25 | — | [260325-jyv-check-github-issues-and-update-task-stat](./quick/260325-jyv-check-github-issues-and-update-task-stat/) |
+| 260325-jyv | Close 23 completed GitHub issues to sync with tasks.md statuses | 2026-03-25 | 5cab924 | [260325-jyv-check-github-issues-and-update-task-stat](./quick/260325-jyv-check-github-issues-and-update-task-stat/) |
 
 ## Session Continuity
 
 Last activity: 2026-03-25
-Last session: 2026-03-25T14:22:39Z
-Stopped at: Completed 260325-jyv (close completed GitHub issues)
+Last session: 2026-03-25T15:31:38.194Z
+Stopped at: Completed 02.1-05-PLAN.md (Phase 02.1 complete)
 Resume file: None

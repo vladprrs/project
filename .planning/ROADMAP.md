@@ -78,7 +78,7 @@ Plans:
 - [x] 02.1-02-PLAN.md -- TipTapEditor component, Zustand store extensions, EditorToolbar, DocsView rewrite
 - [x] 02.1-03-PLAN.md -- Save functionality (Ctrl+S) and in-document search (Cmd+F)
 - [x] 02.1-04-PLAN.md -- Diff view: diff-compute, DiffOverlay, snapshot capture, filesystem wiring
-- [ ] 02.1-05-PLAN.md -- Edit-mode safeguards, tab bar overflow, live-reload search, end-to-end verification
+- [x] 02.1-05-PLAN.md -- Edit-mode safeguards, tab bar overflow, live-reload search, end-to-end verification
 **UI hint**: yes
 
 ### Phase 3: Pipeline + Kanban
