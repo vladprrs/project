@@ -68,12 +68,17 @@ export function TipTapEditor({ content, editable, onUpdate, onEditorReady }: Tip
     }
   }, [editor, editable]);
 
-  // Update content from live-reload (read-only mode) with scroll preservation
+  // Update content from live-reload (read-only mode) with scroll preservation.
+  // Skip the initial mount — editor was created with content already.
+  const isInitialContent = useRef(true);
   useEffect(() => {
     if (!editor || editor.isDestroyed) return;
+    if (isInitialContent.current) {
+      isInitialContent.current = false;
+      return;
+    }
 
     // Skip if in edit mode -- don't overwrite user edits
-    // (conflict warning handled by Plan 05)
     if (editable) return;
 
     // Capture scroll position before content update

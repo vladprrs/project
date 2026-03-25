@@ -24,9 +24,20 @@ export function DocsView() {
   const [searchVisible, setSearchVisible] = useState(false);
 
   const activeDiff = activeTab ? diffData.get(activeTab.filePath) : undefined;
+  const activeDiffRef = useRef(activeDiff);
+  activeDiffRef.current = activeDiff;
 
   const handleEditorReady = useCallback((editor: Editor) => {
     editorRef.current = editor;
+    // Apply pending diff decorations after editor is fully initialized
+    const pendingDiff = activeDiffRef.current;
+    if (pendingDiff && pendingDiff.length > 0) {
+      requestAnimationFrame(() => {
+        if (!editor.isDestroyed) {
+          editor.commands.setDiffDecorations(pendingDiff);
+        }
+      });
+    }
   }, []);
 
   const handleToggleMode = useCallback(() => {
@@ -81,7 +92,7 @@ export function DocsView() {
     }
   }, [activeTab, updateTabContent, setTabDirty]);
 
-  // Apply or clear diff decorations when activeDiff changes
+  // Apply or clear diff decorations when activeDiff changes while editor is mounted
   useEffect(() => {
     const editor = editorRef.current;
     if (!editor || editor.isDestroyed) return;
