@@ -29,10 +29,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Editing a file in `specs/<feature>/` triggers a WebSocket message that arrives in the browser console within 2 seconds
   4. SQLite database is created on first run with tables for pipeline state, task cache, and chat history (verified via schema query)
   5. Backend enforces single active feature -- setting a feature via API rejects if another is already active
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 01-01: TBD
+- [x] 01-01-PLAN.md -- Monorepo structure, shared types package
+- [x] 01-02-PLAN.md -- Backend: Express server, WebSocket, file watcher, SQLite, feature API
+- [x] 01-03-PLAN.md -- Frontend: Vite, Tailwind, icon rail, placeholder views, WebSocket client
+- [x] 01-04-PLAN.md -- Gap closure: npm start script, INFRA-07 snapshot on reconnect, requirements tracking
 **UI hint**: yes
 
 ### Phase 2: Chat + Document Editor
@@ -82,11 +85,11 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/0 | Not started | - |
+| 1. Foundation | 3/4 | Gap closure planned | - |
 | 2. Chat + Document Editor | 0/0 | Not started | - |
 | 3. Pipeline + Kanban | 0/0 | Not started | - |
 | 4. Integration + Polish | 0/0 | Not started | - |
