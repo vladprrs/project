@@ -9,16 +9,21 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@ai-sdk/react": "^3.0.140",
+    "@tailwindcss/typography": "^0.5.19",
+    "lucide-react": "^1.0.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "zustand": "^5.0.12",
-    "lucide-react": "^1.0.1"
+    "react-markdown": "^10.1.0",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^6.0.1",
-    "tailwindcss": "^4.2.2",
     "@tailwindcss/vite": "^4.2.2",
     "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0"
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "tailwindcss": "^4.2.2"
   }
 }
