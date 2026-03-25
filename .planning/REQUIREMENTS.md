@@ -11,10 +11,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **CHAT-01**: User can type natural language commands in chat panel to invoke spec-first workflow stages (specify, clarify, plan, tasks, implement, verify)
 - [ ] **CHAT-02**: Chat uses Vercel AI SDK (useChat) with streaming responses from coding agents
-- [ ] **CHAT-03**: Backend exposes /api/chat endpoint with custom AI SDK providers per agent (ai-sdk-provider-claude-code, ai-sdk-provider-codex-app-server, ai-sdk-provider-opencode-sdk)
+- [x] **CHAT-03**: Backend exposes /api/chat endpoint with custom AI SDK providers per agent (ai-sdk-provider-claude-code, ai-sdk-provider-codex-app-server, ai-sdk-provider-opencode-sdk)
 - [ ] **CHAT-04**: Chat displays structured streaming output with stage transitions, progress messages, and result summaries — not raw CLI stdout
 - [ ] **CHAT-05**: Chat messages include clickable artifact references (spec.md, plan.md, tasks.md) that open the document in the editor panel
-- [ ] **CHAT-06**: Chat persists conversation history per feature in SQLite
+- [x] **CHAT-06**: Chat persists conversation history per feature in SQLite
 - [ ] **CHAT-07**: Chat displays clear activity indicators during agent execution ("Generating spec...", "Building plan...")
 - [ ] **CHAT-08**: Chat displays errors with actionable context (human-readable message + retry/edit action), not stack traces
 - [ ] **CHAT-09**: User can type feedback after rejection to re-invoke the current stage with updated context (rejection-feedback-retry loop)
@@ -22,7 +22,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Document Editor
 
 - [ ] **EDIT-01**: User can view spec.md, plan.md, and tasks.md rendered in TipTap with markdown support (headings, lists, code blocks, tables, checkboxes)
-- [ ] **EDIT-02**: Document editor live-reloads when artifact files change on disk via backend filesystem watch + WebSocket push
+- [x] **EDIT-02**: Document editor live-reloads when artifact files change on disk via backend filesystem watch + WebSocket push
 - [ ] **EDIT-03**: Editor supports multiple document tabs with tab bar navigation
 - [ ] **EDIT-04**: Editor tabs open automatically when a new artifact is created by an agent command
 - [ ] **EDIT-05**: Editor has read-only mode by default for generated artifacts, with explicit toggle to edit mode
@@ -108,15 +108,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | CHAT-01 | Phase 2 | Pending |
 | CHAT-02 | Phase 2 | Pending |
-| CHAT-03 | Phase 2 | Pending |
+| CHAT-03 | Phase 2 | Complete |
 | CHAT-04 | Phase 2 | Pending |
 | CHAT-05 | Phase 2 | Pending |
-| CHAT-06 | Phase 2 | Pending |
+| CHAT-06 | Phase 2 | Complete |
 | CHAT-07 | Phase 2 | Pending |
 | CHAT-08 | Phase 2 | Pending |
 | CHAT-09 | Phase 2 | Pending |
 | EDIT-01 | Phase 2 | Pending |
-| EDIT-02 | Phase 2 | Pending |
+| EDIT-02 | Phase 2 | Complete |
 | EDIT-03 | Phase 2 | Pending |
 | EDIT-04 | Phase 2 | Pending |
 | EDIT-05 | Phase 2 | Pending |
