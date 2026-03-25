@@ -27,7 +27,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **EDIT-04**: Editor tabs open automatically when a new artifact is created by an agent command
 - [x] **EDIT-05**: Editor has read-only mode by default for generated artifacts, with explicit toggle to edit mode
 - [ ] **EDIT-06**: Editor supports basic in-document search (Cmd+F)
-- [ ] **EDIT-07**: Editor supports undo/redo within edit sessions
+- [x] **EDIT-07**: Editor supports undo/redo within edit sessions
 - [ ] **EDIT-08**: Editor shows artifact diff view when reviewing post-rejection revisions (inline diff markers showing what changed)
 
 ### Pipeline & Workflow
@@ -121,7 +121,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EDIT-04 | Phase 2 | Complete |
 | EDIT-05 | Phase 2 | Complete |
 | EDIT-06 | Phase 2 | Pending |
-| EDIT-07 | Phase 2 | Pending |
+| EDIT-07 | Phase 2 | Complete |
 | EDIT-08 | Phase 2 | Pending |
 | PIPE-01 | Phase 3 | Pending |
 | PIPE-02 | Phase 3 | Pending |

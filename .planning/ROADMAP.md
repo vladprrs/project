@@ -74,7 +74,7 @@ Plans:
 **Plans**: 5 plans
 
 Plans:
-- [ ] 02.1-01-PLAN.md -- Dependencies, shared types, backend POST /api/files/save with watcher suppression
+- [x] 02.1-01-PLAN.md -- Dependencies, shared types, backend POST /api/files/save with watcher suppression
 - [ ] 02.1-02-PLAN.md -- TipTapEditor component, Zustand store extensions, EditorToolbar, DocsView rewrite
 - [ ] 02.1-03-PLAN.md -- Save functionality (Ctrl+S) and in-document search (Cmd+F)
 - [ ] 02.1-04-PLAN.md -- Diff view: diff-compute, DiffOverlay, snapshot capture, filesystem wiring

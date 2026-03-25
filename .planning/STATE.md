@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: "Phase 02 shipped — PR #136"
-stopped_at: "Completed 02-05 Task 1; awaiting checkpoint:human-verify for Task 2"
-last_updated: "2026-03-25T06:11:40.157Z"
+status: Ready to execute
+stopped_at: Completed 02.1-01-PLAN.md
+last_updated: "2026-03-25T08:18:21.242Z"
 last_activity: 2026-03-25
 progress:
-  total_phases: 4
+  total_phases: 5
   completed_phases: 2
-  total_plans: 9
-  completed_plans: 9
+  total_plans: 14
+  completed_plans: 10
 ---
 
 # Project State
@@ -20,12 +20,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** The IDE maps human decisions (approve, reject, refine) to automated spec-first AI execution, making the workflow accessible without memorizing CLI commands.
-**Current focus:** Phase 02 — chat-document-editor
+**Current focus:** Phase 02.1 — Editor Edit Mode + Diff View
 
 ## Current Position
 
-Phase: 3
-Plan: Not started
+Phase: 02.1 (Editor Edit Mode + Diff View) — EXECUTING
+Plan: 2 of 5
 
 ## Performance Metrics
 
@@ -56,6 +56,7 @@ Plan: Not started
 | Phase 02 P03 | 2min | 2 tasks | 6 files |
 | Phase 02 P04 | 3min | 2 tasks | 6 files |
 | Phase 02 P05 | 5min | 1 tasks | 2 files |
+| Phase 02.1 P01 | 9min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -89,6 +90,12 @@ Recent decisions affecting current work:
 - [Phase 02]: Auto-open from filesystem:created captures previousActiveTabId BEFORE openTab to prevent focus steal
 - [Phase 02]: AI SDK v6 sendMessage uses { text } not { content }; onFinish destructures { message } from options
 - [Phase 02]: useRef pattern for stale closure prevention in async callbacks (activeFeatureRef)
+- [Phase 02.1]: TipTap 3.20.5 installed directly (no v2 migration cost since no v2 code exists)
+- [Phase 02.1]: Backend-side recentlySaved Set with 500ms TTL for file watcher self-save suppression
+
+### Roadmap Evolution
+
+- Phase 02.1 inserted after Phase 02: Editor Edit Mode + Diff View — TipTap migration, edit/save/search, inline diff markers for rejection feedback (URGENT)
 
 ### Pending Todos
 
@@ -108,6 +115,6 @@ None yet.
 ## Session Continuity
 
 Last activity: 2026-03-25
-Last session: 2026-03-25T05:03:44.140Z
-Stopped at: Completed 02-05 Task 1; awaiting checkpoint:human-verify for Task 2
+Last session: 2026-03-25T08:18:21.238Z
+Stopped at: Completed 02.1-01-PLAN.md
 Resume file: None
